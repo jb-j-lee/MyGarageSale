@@ -1,28 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#0099cc"
-    tools:context=".FullscreenActivity">
+    android:orientation="vertical"
+    tools:context=".MyActivity">
 
-    <!-- The primary full-screen view. This can be replaced with whatever view
-         is needed to present your content, e.g. VideoView, SurfaceView,
-         TextureView, etc. -->
-    <TextView
+    <LinearLayout
         android:id="@+id/fullscreen_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:keepScreenOn="true"
-        android:text="@string/dummy_content"
-        android:textColor="#33b5e5"
-        android:textSize="50sp"
-        android:textStyle="bold" />
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-    <!-- This FrameLayout insets its children based on system windows using
-         android:fitsSystemWindows. -->
-    <FrameLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView_yes24"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:scrollbarStyle="outsideOverlay"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            app:spanCount="1" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView_aladin"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:scrollbarStyle="outsideOverlay"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            app:spanCount="1" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
@@ -53,6 +66,6 @@
                 android:layout_weight="1"
                 android:text="@string/aladin_button" />
         </LinearLayout>
-    </FrameLayout>
+    </LinearLayout>
 
-</FrameLayout>
+</LinearLayout>

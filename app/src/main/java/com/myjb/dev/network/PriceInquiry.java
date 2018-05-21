@@ -28,10 +28,10 @@ public class PriceInquiry extends AsyncTask<Void, Void, List<PriceInquiry.Item>>
     protected final static String TAG = "PriceInquiry";
 
     public class Item {
-        String price;
-        String best;
-        String high;
-        String medium;
+        public String price;
+        public String best;
+        public String high;
+        public String medium;
 
         Item(String price, String best, String high, String medium) {
             this.price = price;

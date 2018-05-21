@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
 import com.myjb.dev.network.PriceInquiry;
 import com.myjb.dev.network.PriceInquiry2Aladin;
 import com.myjb.dev.network.PriceInquiry2Yes24;
+import com.myjb.dev.recyclerView.PriceAdapter;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
@@ -19,6 +21,8 @@ import org.androidannotations.annotations.ViewById;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -26,7 +30,7 @@ import java.util.List;
  * status bar and navigation/system bar) with user interaction.
  */
 @EActivity(R.layout.activity_fullscreen)
-public class FullscreenActivity extends AppCompatActivity {
+public class MyActivity extends AppCompatActivity {
 
     private static final int AUTO_HIDE_DELAY_MILLIS = 3000;
 
@@ -38,11 +42,16 @@ public class FullscreenActivity extends AppCompatActivity {
     private final Handler mHideHandler = new Handler();
 
     @ViewById(R.id.fullscreen_content)
-    View mContentView;
+    View contentView;
 
     @ViewById(R.id.fullscreen_content_controls)
-    View mControlsView;
+    View controlsView;
 
+    @ViewById(R.id.recyclerView_yes24)
+    RecyclerView recyclerView_yes24;
+
+    @ViewById(R.id.recyclerView_aladin)
+    RecyclerView recyclerView_aladin;
 
     private final Runnable mHidePart2Runnable = new Runnable() {
         @SuppressLint("InlinedApi")
@@ -53,7 +62,7 @@ public class FullscreenActivity extends AppCompatActivity {
             // Note that some of these constants are new as of API 16 (Jelly Bean)
             // and API 19 (KitKat). It is safe to use them, as they are inlined
             // at compile-time and do nothing on earlier devices.
-            mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
+            contentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
                     | View.SYSTEM_UI_FLAG_FULLSCREEN
                     | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                     | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
@@ -70,7 +79,7 @@ public class FullscreenActivity extends AppCompatActivity {
             if (actionBar != null) {
                 actionBar.show();
             }
-            mControlsView.setVisibility(View.VISIBLE);
+            controlsView.setVisibility(View.VISIBLE);
         }
     };
     private final Runnable mHideRunnable = new Runnable() {
@@ -90,6 +99,22 @@ public class FullscreenActivity extends AppCompatActivity {
         super.onPostCreate(savedInstanceState);
 
         delayedHide(AUTO_HIDE_DELAY_MILLIS);
+
+        String[] list = new String[0];
+        try {
+            list = new String[]{
+                    "9788991268807",    //프로그래머의 길, 멘토에게 묻다
+                    "9788959136797",    //SBS 스페셜 산후조리 100일의 기적
+                    "9788960862609",    //입사 후 3년
+                    "9788995300961",    //Professional 소프트웨어 개발
+                    URLEncoder.encode("MIT 수학천재들의 카지노 무너뜨리기", "EUC-KR").toString(),
+            };
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        PriceAdapter recyclerAdapter = new PriceAdapter();
+        recyclerView_yes24.setAdapter(recyclerAdapter);
+        recyclerView_yes24.setHasFixedSize(true);
     }
 
     private void hide() {
@@ -98,7 +123,7 @@ public class FullscreenActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.hide();
         }
-        mControlsView.setVisibility(View.GONE);
+        controlsView.setVisibility(View.GONE);
 
         // Schedule a runnable to remove the status and navigation bar after a delay
         mHideHandler.removeCallbacks(mShowPart2Runnable);
@@ -108,7 +133,7 @@ public class FullscreenActivity extends AppCompatActivity {
     @SuppressLint("InlinedApi")
     private void show() {
         // Show the system bar
-        mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        contentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
 
         // Schedule a runnable to display UI elements after a delay
@@ -127,7 +152,7 @@ public class FullscreenActivity extends AppCompatActivity {
 
     @Click(R.id.fullscreen_content)
     void onToggle(View view) {
-        if (mControlsView.getVisibility() == View.VISIBLE) {
+        if (controlsView.getVisibility() == View.VISIBLE) {
             hide();
         } else {
             show();
@@ -146,8 +171,6 @@ public class FullscreenActivity extends AppCompatActivity {
             }
         }).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
     }
-
-    ;
 
     @Click(R.id.aladin)
     void onAladinButton(View view) {
