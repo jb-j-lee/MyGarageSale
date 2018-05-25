@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="book_name">
+        <item>"HTML &amp; JAVA SCRIPT 사전"</item>
+        <item>"입사 후 3년"</item>
+        <item>"회사가 원하는 전략형 인간"</item>
+        <item>"회사가 붙잡는 사람들의 1% 비밀"</item>
+        <item>"Professional 소프트웨어 개발"</item>
+
+        <item>"초보자를 위한 Java 2 SDK 1.4 21일 완성"</item>
+        <item>"MIT 수학천재들의 카지노 무너뜨리기"</item>
+        <item>"sbs 스페셜 산후조리 100일의 기적"</item>
+        <item>"경제 상식 퀴즈"</item>
+        <item>"그래도 펀드가 재테크의 꽃이다"</item>
+
+        <item>"대한민국 2030 재테크 독하게 하라"</item>
+        <item>"4개의 통장"</item>
+        <item>"대한민국 20대, 재테크에 미쳐라"</item>
+        <item>"대한민국 20대, 펀드투자에 미쳐라"</item>
+    </string-array>
+    <string-array name="book_isbn">
+        <item>893141501x</item>
+        <item>9788960862609</item>
+        <item>9788996156970</item>
+        <item>9788960861626</item>
+        <item>8995300965</item>
+
+        <item>8980545029</item>
+        <item>8984477990</item>
+        <item>9788959136797</item>
+        <item>9788975607615</item>
+        <item>9788975608513</item>
+
+        <item>9788991984080</item>
+        <item>9788993285550</item>
+        <item>9788959750573</item>
+        <item>9788959750955</item>
+    </string-array>
+</resources>
