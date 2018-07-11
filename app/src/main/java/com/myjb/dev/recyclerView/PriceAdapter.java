@@ -12,15 +12,19 @@ import org.androidannotations.annotations.RootContext;
 import org.androidannotations.annotations.res.StringArrayRes;
 
 import java.util.Arrays;
+import java.util.List;
 
 @EBean
-public class PriceAdapter extends RecyclerViewAdapterBase<String, PriceItemView> {
+public class PriceAdapter extends RecyclerViewAdapterBase<String, ItemView> {
 
     @RootContext
     Context context;
 
     @StringArrayRes(R.array.book_name)
     String[] names;
+
+    @NonNull
+    List<String> list;
 
     public PriceAdapter(@NonNull Context context) {
         this.context = context;
@@ -34,13 +38,13 @@ public class PriceAdapter extends RecyclerViewAdapterBase<String, PriceItemView>
     @Override
     protected ItemView onCreateItemView(ViewGroup parent, int viewType) {
         if (viewType == 0)
-            return new BookItemView(context);
+            return BookItemView_.build(context);
         else
-            return new PriceItemView(context);
+            return PriceItemView_.build(context);
     }
 
     @Override
-    public void onBindViewHolder(final ViewWrapper<PriceItemView> viewHolder, int position) {
+    public void onBindViewHolder(final ViewWrapper<ItemView> viewHolder, int position) {
         String isbn = list.get(position);
         ItemView view = viewHolder.getView();
         view.bind(isbn);
@@ -56,6 +60,13 @@ public class PriceAdapter extends RecyclerViewAdapterBase<String, PriceItemView>
 
     @Override
     public int getItemViewType(int position) {
-        return 1;
+        return 0;
+    }
+
+    @Override
+    public int getItemCount() {
+        if (list == null)
+            return 0;
+        return list.size();
     }
 }

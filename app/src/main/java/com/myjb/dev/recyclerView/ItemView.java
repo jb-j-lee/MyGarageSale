@@ -10,13 +10,11 @@ import com.myjb.dev.network.PriceItem;
 import org.androidannotations.annotations.EViewGroup;
 import org.androidannotations.annotations.ViewById;
 
-@EViewGroup
 public abstract class ItemView<T> extends LinearLayout {
 
     public ItemView(Context context) {
         super(context);
     }
 
-    protected void bind(T item) {
-    }
+    protected abstract void bind(T item);
 }

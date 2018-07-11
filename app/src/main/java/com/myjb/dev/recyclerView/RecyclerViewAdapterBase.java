@@ -14,20 +14,11 @@ import java.util.List;
 
 public abstract class RecyclerViewAdapterBase<T, V extends View> extends RecyclerView.Adapter<ViewWrapper<V>> {
 
-    protected List<T> list = new ArrayList<T>();
-
     @NonNull
     @Override
     public ViewWrapper<V> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ViewWrapper(onCreateItemView(parent, viewType));
     }
 
-    protected ItemView onCreateItemView(ViewGroup parent, int viewType) {
-        return null;
-    }
-
-    @Override
-    public int getItemCount() {
-        return list.size();
-    }
+    protected abstract ItemView onCreateItemView(ViewGroup parent, int viewType);
 }

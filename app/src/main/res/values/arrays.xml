@@ -17,6 +17,23 @@
         <item>"4개의 통장"</item>
         <item>"대한민국 20대, 재테크에 미쳐라"</item>
         <item>"대한민국 20대, 펀드투자에 미쳐라"</item>
+        <item>"프로그래밍 언어론 (6/e) (한국어판)"</item>
+        <item>"Data Structures : A Pseudocode Approach With C"</item>
+
+        <item>"Head First SQL"</item>
+        <item>"웹 개발자를 위한 스프링 3.0 프로그래밍"</item>
+        <item>"자바 자료구조론"</item>
+        <item>"컴퓨터 네트워킹"</item>
+        <item>"데이타베이스 시스템"</item>
+
+        <item>"유비쿼터스 컴퓨팅 보안"</item>
+        <item>"서자룡의 리눅스 8.0 그대로 따라하기"</item>
+        <item>"뉴욕의 프로그래머"</item>
+        <item>"나는 프로그래머다"</item>
+        <item>"임백준의 소프트웨어 산책"</item>
+
+        <item>"누워서 읽는 알고리즘"</item>
+        <item>"좋은 프로그래밍 습관 : 경쟁력을 갖춘 전문가의 작은 차이"</item>
     </string-array>
     <string-array name="book_isbn">
         <item>893141501x</item>
@@ -35,5 +52,22 @@
         <item>9788993285550</item>
         <item>9788959750573</item>
         <item>9788959750955</item>
+        <item>8972834211</item>
+        <item>0534390803</item>
+
+        <item>9788979145601</item>
+        <item>9788980782314</item>
+        <item>8955501609</item>
+        <item>894500601x</item>
+        <item>8935303984</item>
+
+        <item>8991182224</item>
+        <item>8983792698</item>
+        <item>9788979145120</item>
+        <item>9788979142747</item>
+        <item>897914329x</item>
+
+        <item>9788979142624</item>
+        <item>8975603105</item>
     </string-array>
 </resources>
