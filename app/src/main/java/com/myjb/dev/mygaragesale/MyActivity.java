@@ -1,11 +1,16 @@
 package com.myjb.dev.mygaragesale;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.myjb.dev.network.PriceInquiry;
 import com.myjb.dev.network.PriceInquiry2Aladin;
 import com.myjb.dev.network.PriceInquiry2Yes24;
@@ -14,6 +19,7 @@ import com.myjb.dev.recyclerView.PriceAdapter;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
@@ -27,6 +33,9 @@ public class MyActivity extends AppCompatActivity implements PriceAdapter.OnItem
 
     @ViewById(R.id.recyclerView)
     RecyclerView recyclerView;
+
+    @ViewById(R.id.button)
+    Button button;
 
     @Bean
     PriceAdapter recyclerAdapter;
@@ -73,5 +82,29 @@ public class MyActivity extends AppCompatActivity implements PriceAdapter.OnItem
                 }
             }
         }).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+    }
+
+    @Click(R.id.button)
+    public void scanBarcode(View view) {
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
+        integrator.setPrompt("Scan a barcode");
+        integrator.setBarcodeImageEnabled(true);
+        integrator.initiateScan();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            if (result.getContents() == null) {
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+            }
+        } else {
+            // This is important, otherwise the result will not be passed to the fragment
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 }

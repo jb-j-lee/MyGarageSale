@@ -21,7 +21,10 @@ android {
 }
 
 dependencies {
-    implementation 'org.jsoup:jsoup:1.11.2'
+    implementation 'org.jsoup:jsoup:1.11.3'
+
+    implementation 'com.journeyapps:zxing-android-embedded:3.6.0@aar'
+    implementation 'com.google.zxing:core:3.3.3'
 
     annotationProcessor "org.androidannotations:androidannotations:4.4.0"
     implementation "org.androidannotations:androidannotations-api:4.4.0"
