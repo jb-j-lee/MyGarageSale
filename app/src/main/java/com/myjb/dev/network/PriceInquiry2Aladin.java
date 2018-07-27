@@ -1,19 +1,6 @@
 package com.myjb.dev.network;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class PriceInquiry2Aladin extends PriceInquiry {
 

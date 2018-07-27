@@ -96,7 +96,7 @@ public class PriceInquiry extends AsyncTask<Void, Void, List<PriceItem>> {
         for (Element element : elements) {
             String[] price = element.select(getDetailFilter()).text().split("원");
             if (price != null)
-                priceList.add(new PriceItem(price[0], price[1], price[2], price[3]));
+                priceList.add(new PriceItem(query, price[0], price[1], price[2], price[3]));
         }
 
         if (BuildConfig.DEBUG)

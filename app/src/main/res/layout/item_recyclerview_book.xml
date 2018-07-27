@@ -9,9 +9,5 @@
 
     <TextView
         android:id="@+id/book"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:duplicateParentState="true"
-        android:textAppearance="?android:textAppearanceMedium" />
+        style="@style/myBook" />
 </LinearLayout>

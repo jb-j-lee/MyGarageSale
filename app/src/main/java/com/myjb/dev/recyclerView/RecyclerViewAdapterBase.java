@@ -5,13 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.myjb.dev.mygaragesale.R;
-
-import org.androidannotations.annotations.res.StringArrayRes;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public abstract class RecyclerViewAdapterBase<T, V extends View> extends RecyclerView.Adapter<ViewWrapper<V>> {
 
     @NonNull

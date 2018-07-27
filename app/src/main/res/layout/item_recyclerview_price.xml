@@ -4,38 +4,28 @@
     android:gravity="center_vertical"
     android:minHeight="?android:listPreferredItemHeight"
     android:orientation="horizontal"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp">
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
+
+    <ImageView
+        android:id="@+id/company"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null" />
 
     <TextView
         android:id="@+id/price"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:duplicateParentState="true"
-        android:textAppearance="?android:textAppearanceMedium" />
+        style="@style/myPrice" />
 
     <TextView
         android:id="@+id/best"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:duplicateParentState="true"
-        android:textAppearance="?android:textAppearanceMedium" />
+        style="@style/myPrice" />
 
     <TextView
         android:id="@+id/high"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:duplicateParentState="true"
-        android:textAppearance="?android:textAppearanceMedium" />
+        style="@style/myPrice" />
 
     <TextView
         android:id="@+id/medium"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:duplicateParentState="true"
-        android:textAppearance="?android:textAppearanceMedium" />
+        style="@style/myPrice" />
 </LinearLayout>

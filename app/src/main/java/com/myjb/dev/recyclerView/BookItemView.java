@@ -1,7 +1,6 @@
 package com.myjb.dev.recyclerView;
 
 import android.content.Context;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.myjb.dev.mygaragesale.R;
