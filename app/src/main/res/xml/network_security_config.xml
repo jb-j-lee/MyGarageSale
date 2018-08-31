@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">www.aladin.co.kr</domain>
+        <domain includeSubdomains="true">www.yes24.com</domain>
+    </domain-config>
+</network-security-config>
