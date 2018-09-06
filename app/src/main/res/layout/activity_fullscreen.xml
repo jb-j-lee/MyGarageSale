@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,38 +7,44 @@
     android:orientation="vertical"
     tools:context=".MyActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <ImageButton
+        android:id="@+id/scan_button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
+        android:background="@drawable/btn_background"
+        android:src="@drawable/barcode"
+        app:layout_constraintBottom_toTopOf="@id/recyclerView"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/editText"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
 
-        <ImageButton
-            android:id="@+id/isbn_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@null"
-            android:src="@mipmap/barcode" />
+    <com.myjb.dev.view.ClearEditText
+        android:id="@+id/editText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:focusedByDefault="false"
+        android:hint="@string/hint_edittext"
+        android:imeOptions="flagNoExtractUi|actionSearch"
+        android:singleLine="true"
+        app:layout_constraintLeft_toRightOf="@id/scan_button"
+        app:layout_constraintRight_toLeftOf="@id/search_button"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
 
-        <EditText
-            android:id="@+id/editText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="5"
-            android:focusedByDefault="false"
-            android:hint="@string/hint_edittext"
-            android:imeOptions="flagNoExtractUi|actionSearch"
-            android:singleLine="true" />
-
-        <ImageButton
-            android:id="@+id/search_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@null"
-            android:src="@mipmap/search" />
-    </LinearLayout>
+    <ImageButton
+        android:id="@+id/search_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_background"
+        android:src="@drawable/btn_search"
+        app:layout_constraintBottom_toTopOf="@id/recyclerView"
+        app:layout_constraintLeft_toRightOf="@id/editText"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -47,12 +53,19 @@
         android:layout_weight="1"
         android:orientation="vertical"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@id/button"
+        app:layout_constraintTop_toBottomOf="@id/editText"
         app:spanCount="1" />
 
     <Button
         android:id="@+id/button"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:visibility="gone"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recyclerView" />
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

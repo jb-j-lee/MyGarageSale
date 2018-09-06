@@ -39,7 +39,7 @@ public class PriceItemView extends ItemView {
     protected void bind(Object item) {
         if (item instanceof PriceItem) {
             if (((PriceItem) item).company > NONE)
-                company.setImageResource((((PriceItem) item).company == ALADIN) ? R.mipmap.logo_aladin : R.mipmap.logo_yes24);
+                company.setImageResource((((PriceItem) item).company == ALADIN) ? R.drawable.logo_aladin : R.drawable.logo_yes24);
             else
                 company.setImageBitmap(null);
 

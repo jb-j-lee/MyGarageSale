@@ -4,6 +4,8 @@
     <string name="yes24_button">"YES24"</string>
     <string name="aladin_button">"ALADIN"</string>
 
-    <string name="isbn_button">"Search for ISBN using camera."</string>
-    <string name="hint_edittext">"Integrated search (title, author, ISBN)"</string>
+    <string name="scan_button">"Search for ISBN using camera."</string>
+    <string name="hint_edittext">"Enter the product name or ISBN."</string>
+
+    <string name="scan_barcode">"Scan ISBN barcode."</string>
 </resources>
