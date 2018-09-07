@@ -1,10 +1,6 @@
 package com.myjb.dev.network;
 
 public class PriceItem {
-    public static final int NONE = 0;
-    public static final int ALADIN = 1;
-    public static final int YES24 = 2;
-
     public String query;
     public int company;
     public String price;

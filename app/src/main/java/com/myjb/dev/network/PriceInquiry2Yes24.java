@@ -2,6 +2,8 @@ package com.myjb.dev.network;
 
 import android.support.annotation.NonNull;
 
+import org.jsoup.nodes.Element;
+
 public class PriceInquiry2Yes24 extends PriceInquiry {
 
     protected final static String TAG = "PriceInquiry2Yes24";
@@ -14,12 +16,24 @@ public class PriceInquiry2Yes24 extends PriceInquiry {
     @NonNull
     @Override
     protected String getBasicFilter() {
-        return "div[class=bbG_price]";
+        return "ul[class=clearfix]";
     }
 
     @NonNull
     @Override
-    protected String getDetailFilter() {
+    protected String getISBN(Element element) {
+        return element.select("span[class=bbG_isbn13]").text().split("-")[1];
+    }
+
+    @NonNull
+    @Override
+    protected String getNameFilter() {
+        return "strong[class=name]";
+    }
+
+    @NonNull
+    @Override
+    protected String getPriceFilter() {
         return "td";
     }
 }

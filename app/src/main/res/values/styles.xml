@@ -15,7 +15,8 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_weight">1</item>
         <item name="android:duplicateParentState">true</item>
-        <item name="android:textAppearance">?android:textAppearanceMedium</item>
+        <item name="android:textAppearance">?android:textAppearanceListItemSmall</item>
+        <item name="android:minHeight">?android:listPreferredItemHeightSmall</item>
     </style>
 
     <style name="myBook" parent="myTextView">
@@ -28,5 +29,14 @@
 
     <style name="myPrice" parent="myTextView">
         <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="myImageButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/btn_background</item>
+        <item name="layout_constraintTop_toTopOf">parent</item>
+        <item name="layout_constraintBottom_toTopOf">@id/recyclerView</item>
+        <item name="layout_constraintVertical_bias">0.5</item>
     </style>
 </resources>

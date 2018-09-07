@@ -4,19 +4,24 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.myjb.dev.network.BookInfoItem;
+import com.myjb.dev.network.NetworkConstraint;
 import com.myjb.dev.network.PriceInquiry;
 import com.myjb.dev.network.PriceInquiry2Aladin;
 import com.myjb.dev.network.PriceInquiry2Yes24;
-import com.myjb.dev.network.PriceItem;
-import com.myjb.dev.recyclerView.PriceAdapter;
+import com.myjb.dev.recyclerView.CardAdapter;
 import com.myjb.dev.view.ClearEditText;
 
 import org.androidannotations.annotations.AfterViews;
@@ -27,11 +32,8 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.List;
 
-import static com.myjb.dev.network.PriceItem.ALADIN;
-import static com.myjb.dev.network.PriceItem.YES24;
-
 @EActivity(R.layout.activity_fullscreen)
-public class MyActivity extends AppCompatActivity implements PriceAdapter.OnItemClickListener {
+public class MyActivity extends AppCompatActivity implements CardAdapter.OnItemClickListener {
 
     @ViewById(R.id.scan_button)
     ImageButton scanButton;
@@ -46,7 +48,7 @@ public class MyActivity extends AppCompatActivity implements PriceAdapter.OnItem
     RecyclerView recyclerView;
 
     @Bean
-    PriceAdapter recyclerAdapter;
+    CardAdapter recyclerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,7 @@ public class MyActivity extends AppCompatActivity implements PriceAdapter.OnItem
 
         recyclerView.setAdapter(recyclerAdapter);
         recyclerView.setHasFixedSize(true);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
     @AfterViews
@@ -72,32 +75,54 @@ public class MyActivity extends AppCompatActivity implements PriceAdapter.OnItem
                 searchButton.setEnabled(length > 0);
             }
         });
+
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    search(v);
+                }
+                return false;
+            }
+        });
+
         searchButton.setEnabled(false);
+    }
+
+    @AfterViews
+    void bindViewePager() {
     }
 
     @Click(R.id.search_button)
     public void search(View view) {
+        final String text = editText.getText().toString();
 
-        new PriceInquiry2Aladin(editText.getText().toString(), new PriceInquiry.OnPriceListener() {
+        if (TextUtils.isEmpty(text)) {
+            //TODO MGS
+            Toast.makeText(getBaseContext(), "입력하세요", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        new PriceInquiry2Aladin(text, new PriceInquiry.OnPriceListener() {
             @Override
-            public void onPriceResult(List<PriceItem> priceList) {
+            public void onPriceResult(List<BookInfoItem> priceList) {
                 if (priceList != null && !priceList.isEmpty()) {
-                    priceList.get(0).company = ALADIN;
+                    priceList.get(0).company = NetworkConstraint.Company.ALADIN;
                     recyclerAdapter.notifyDataSetChanged();
 
-                    Toast.makeText(getBaseContext(), "Aladin : " + editText.getText().toString() + ", " + priceList.toString(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), "Aladin : " + text + ", " + priceList.toString(), Toast.LENGTH_LONG).show();
                 }
             }
         }).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
-        new PriceInquiry2Yes24(editText.getText().toString(), new PriceInquiry.OnPriceListener() {
+        new PriceInquiry2Yes24(text, new PriceInquiry.OnPriceListener() {
             @Override
-            public void onPriceResult(List<PriceItem> priceList) {
+            public void onPriceResult(List<BookInfoItem> priceList) {
                 if (priceList != null && !priceList.isEmpty()) {
-                    priceList.get(0).company = YES24;
+                    priceList.get(0).company = NetworkConstraint.Company.YES24;
 //                    recyclerAdapter.updateView(priceList.get(0), 2 * position + 1);
                     recyclerAdapter.notifyDataSetChanged();
 
-                    Toast.makeText(getBaseContext(), "Yes24 : " + editText.getText().toString() + ", " + priceList.toString(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), "Yes24 : " + text + ", " + priceList.toString(), Toast.LENGTH_LONG).show();
                 }
             }
         }).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
@@ -118,6 +143,7 @@ public class MyActivity extends AppCompatActivity implements PriceAdapter.OnItem
 
         if (result != null) {
             if (!TextUtils.isEmpty(result.getContents())) {
+                //TODO call seach(view) - auto searching
                 editText.setText(result.getContents());
             }
         } else {
@@ -130,27 +156,28 @@ public class MyActivity extends AppCompatActivity implements PriceAdapter.OnItem
     public void onItemClick(final String name, String isbn, final int position) {
         new PriceInquiry2Aladin(isbn, new PriceInquiry.OnPriceListener() {
             @Override
-            public void onPriceResult(List<PriceItem> priceList) {
+            public void onPriceResult(List<BookInfoItem> priceList) {
                 if (priceList != null && !priceList.isEmpty()) {
-                    priceList.get(0).company = ALADIN;
-                    recyclerAdapter.updateView(priceList.get(0), 2 * position);
-                    recyclerAdapter.notifyDataSetChanged();
+                    priceList.get(0).company = NetworkConstraint.Company.ALADIN;
+                    recyclerAdapter.updateView(priceList.get(0), position);
+                    recyclerAdapter.notifyItemChanged(position);
 
                     Toast.makeText(getBaseContext(), "Aladin : " + name + ", " + priceList.toString(), Toast.LENGTH_LONG).show();
                 }
             }
         }).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
-        new PriceInquiry2Yes24(isbn, new PriceInquiry.OnPriceListener() {
-            @Override
-            public void onPriceResult(List<PriceItem> priceList) {
-                if (priceList != null && !priceList.isEmpty()) {
-                    priceList.get(0).company = YES24;
-                    recyclerAdapter.updateView(priceList.get(0), 2 * position + 1);
-                    recyclerAdapter.notifyDataSetChanged();
 
-                    Toast.makeText(getBaseContext(), "Yes24 : " + name + ", " + priceList.toString(), Toast.LENGTH_LONG).show();
-                }
-            }
-        }).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+//        new PriceInquiry2Yes24(isbn, new PriceInquiry.OnPriceListener() {
+//            @Override
+//            public void onPriceResult(List<BookInfoItem> priceList) {
+//                if (priceList != null && !priceList.isEmpty()) {
+//                    priceList.get(0).company = NetworkConstraint.Company.YES24;
+//                    recyclerAdapter.updateView(priceList.get(0), position);
+//                    recyclerAdapter.notifyItemChanged(position);
+//
+//                    Toast.makeText(getBaseContext(), "Yes24 : " + name + ", " + priceList.toString(), Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        }).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
     }
 }

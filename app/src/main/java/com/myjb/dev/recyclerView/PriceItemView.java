@@ -5,13 +5,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.myjb.dev.mygaragesale.R;
+import com.myjb.dev.network.NetworkConstraint;
 import com.myjb.dev.network.PriceItem;
 
 import org.androidannotations.annotations.EViewGroup;
 import org.androidannotations.annotations.ViewById;
-
-import static com.myjb.dev.network.PriceItem.ALADIN;
-import static com.myjb.dev.network.PriceItem.NONE;
 
 @EViewGroup(R.layout.item_recyclerview_price)
 public class PriceItemView extends ItemView {
@@ -38,8 +36,8 @@ public class PriceItemView extends ItemView {
     @Override
     protected void bind(Object item) {
         if (item instanceof PriceItem) {
-            if (((PriceItem) item).company > NONE)
-                company.setImageResource((((PriceItem) item).company == ALADIN) ? R.drawable.logo_aladin : R.drawable.logo_yes24);
+            if (((PriceItem) item).company > NetworkConstraint.Company.NONE)
+                company.setImageResource((((PriceItem) item).company == NetworkConstraint.Company.ALADIN) ? R.drawable.logo_aladin : R.drawable.logo_yes24);
             else
                 company.setImageBitmap(null);
 

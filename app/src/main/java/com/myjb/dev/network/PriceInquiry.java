@@ -17,10 +17,10 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PriceInquiry extends AsyncTask<Void, Void, List<PriceItem>> {
+public class PriceInquiry extends AsyncTask<Void, Void, List<BookInfoItem>> {
 
     public interface OnPriceListener {
-        void onPriceResult(List<PriceItem> priceList);
+        void onPriceResult(List<BookInfoItem> priceList);
     }
 
     protected final static String TAG = "PriceInquiry";
@@ -35,7 +35,7 @@ public class PriceInquiry extends AsyncTask<Void, Void, List<PriceItem>> {
     }
 
     @Override
-    protected List<PriceItem> doInBackground(Void... params) {
+    protected List<BookInfoItem> doInBackground(Void... params) {
         String url = baseUrl + query;
         if (BuildConfig.DEBUG)
             Log.e(TAG, "[basicVersion] url : " + url);
@@ -44,12 +44,12 @@ public class PriceInquiry extends AsyncTask<Void, Void, List<PriceItem>> {
     }
 
     @Override
-    protected void onPostExecute(List<PriceItem> imageUrls) {
+    protected void onPostExecute(List<BookInfoItem> imageUrls) {
         if (listener != null)
             listener.onPriceResult(imageUrls);
     }
 
-    protected List<PriceItem> getPriceInfo(String url) {
+    protected List<BookInfoItem> getPriceInfo(String url) {
         try {
             long init = System.currentTimeMillis();
 
@@ -61,7 +61,7 @@ public class PriceInquiry extends AsyncTask<Void, Void, List<PriceItem>> {
 
             long select = System.currentTimeMillis();
 
-            List<PriceItem> priceList = getItems(elements);
+            List<BookInfoItem> priceList = getItems(elements);
 
             if (BuildConfig.DEBUG)
                 Log.e(TAG, "[basicVersion] connect : " + (connect - init) + ", select : " + (select - connect) + ", add : " + (System.currentTimeMillis() - select));
@@ -91,12 +91,21 @@ public class PriceInquiry extends AsyncTask<Void, Void, List<PriceItem>> {
     }
 
     @NonNull
-    private List<PriceItem> getItems(Elements elements) {
-        List<PriceItem> priceList = new ArrayList<>();
+    private List<BookInfoItem> getItems(Elements elements) {
+        List<BookInfoItem> priceList = new ArrayList<>();
         for (Element element : elements) {
-            String[] price = element.select(getDetailFilter()).text().split("원");
+            String isbn = getISBN(element);
+            Log.e(TAG, "[basicVersion] isbn : " + isbn);
+
+            String image = element.select(getImageFilter()).attr("src");
+            Log.e(TAG, "[basicVersion] getImageFilter() : " + getImageFilter() + ", image : " + image);
+
+            String name = element.select(getNameFilter()).text();
+            Log.e(TAG, "[basicVersion] getNameFilter() : " + getNameFilter() + ", name : " + name);
+
+            String[] price = element.select(getPriceFilter()).text().split("원");
             if (price != null)
-                priceList.add(new PriceItem(query, price[0], price[1], price[2], price[3]));
+                priceList.add(new BookInfoItem(isbn, image, name, price[0], price[1], price[2], price[3]));
         }
 
         if (BuildConfig.DEBUG)
@@ -110,7 +119,22 @@ public class PriceInquiry extends AsyncTask<Void, Void, List<PriceItem>> {
     }
 
     @NonNull
-    protected String getDetailFilter() {
+    protected String getISBN(Element element) {
+        return null;
+    }
+
+    @NonNull
+    protected String getImageFilter() {
+        return "img[abs:src]";
+    }
+
+    @NonNull
+    protected String getNameFilter() {
+        return null;
+    }
+
+    @NonNull
+    protected String getPriceFilter() {
         return null;
     }
 }
