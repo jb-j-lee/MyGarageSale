@@ -1,13 +1,24 @@
 package com.myjb.dev.mygaragesale;
 
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.ImageSpan;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageButton;
@@ -16,24 +27,17 @@ import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.myjb.dev.network.BookInfoItem;
-import com.myjb.dev.network.NetworkConstraint;
-import com.myjb.dev.network.PriceInquiry;
-import com.myjb.dev.network.PriceInquiry2Aladin;
-import com.myjb.dev.network.PriceInquiry2Yes24;
-import com.myjb.dev.recyclerView.CardAdapter;
 import com.myjb.dev.view.ClearEditText;
 
 import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
-import java.util.List;
+@EActivity(R.layout.activity_main)
+public class MyActivity extends AppCompatActivity {
 
-@EActivity(R.layout.activity_fullscreen)
-public class MyActivity extends AppCompatActivity implements CardAdapter.OnItemClickListener {
+    public static final String COMPANY = "COMPANY";
 
     @ViewById(R.id.scan_button)
     ImageButton scanButton;
@@ -41,14 +45,13 @@ public class MyActivity extends AppCompatActivity implements CardAdapter.OnItemC
     @ViewById(R.id.editText)
     ClearEditText editText;
 
-    @ViewById(R.id.search_button)
-    ImageButton searchButton;
+    @ViewById(R.id.tabLayout)
+    TabLayout tabLayout;
 
-    @ViewById(R.id.recyclerView)
-    RecyclerView recyclerView;
+    @ViewById(R.id.viewPager)
+    ViewPager viewPager;
 
-    @Bean
-    CardAdapter recyclerAdapter;
+    MyPagerAdapter pagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,73 +62,59 @@ public class MyActivity extends AppCompatActivity implements CardAdapter.OnItemC
     }
 
     @AfterViews
-    void bindAdapter() {
-        recyclerAdapter.setOnItemClickListener(this);
-
-        recyclerView.setAdapter(recyclerAdapter);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-    }
-
-    @AfterViews
-    void bindEditText() {
-        editText.setOnTextChangeListener(new ClearEditText.OnTextChangeListener() {
-            @Override
-            public void onTextChange(int length) {
-                searchButton.setEnabled(length > 0);
-            }
-        });
-
+    void bindViews() {
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    search(v);
+                    search(editText.getText().toString());
                 }
                 return false;
             }
         });
 
-        searchButton.setEnabled(false);
+        scanButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        applyColorFilter(true);
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        applyColorFilter(v.isPressed());
+                        break;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                    case MotionEvent.ACTION_OUTSIDE:
+                    default:
+                        applyColorFilter(false);
+                        break;
+                }
+                return false;
+            }
+        });
+
+        pagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(pagerAdapter);
+        tabLayout.setupWithViewPager(viewPager);
+
+        if (BuildConfig.DEBUG) {
+            editText.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    search("docker");
+                }
+            }, 1000);
+        }
     }
 
-    @AfterViews
-    void bindViewePager() {
-    }
-
-    @Click(R.id.search_button)
-    public void search(View view) {
-        final String text = editText.getText().toString();
-
+    public void search(@NonNull String text) {
         if (TextUtils.isEmpty(text)) {
-            //TODO MGS
-            Toast.makeText(getBaseContext(), "입력하세요", Toast.LENGTH_SHORT).show();
-            return;
+            Toast.makeText(getBaseContext(), R.string.hint_edittext, Toast.LENGTH_SHORT).show();
         }
 
-        new PriceInquiry2Aladin(text, new PriceInquiry.OnPriceListener() {
-            @Override
-            public void onPriceResult(List<BookInfoItem> priceList) {
-                if (priceList != null && !priceList.isEmpty()) {
-                    priceList.get(0).company = NetworkConstraint.Company.ALADIN;
-                    recyclerAdapter.notifyDataSetChanged();
-
-                    Toast.makeText(getBaseContext(), "Aladin : " + text + ", " + priceList.toString(), Toast.LENGTH_LONG).show();
-                }
-            }
-        }).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
-        new PriceInquiry2Yes24(text, new PriceInquiry.OnPriceListener() {
-            @Override
-            public void onPriceResult(List<BookInfoItem> priceList) {
-                if (priceList != null && !priceList.isEmpty()) {
-                    priceList.get(0).company = NetworkConstraint.Company.YES24;
-//                    recyclerAdapter.updateView(priceList.get(0), 2 * position + 1);
-                    recyclerAdapter.notifyDataSetChanged();
-
-                    Toast.makeText(getBaseContext(), "Yes24 : " + text + ", " + priceList.toString(), Toast.LENGTH_LONG).show();
-                }
-            }
-        }).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+        MyFragment myFragment = (MyFragment) getSupportFragmentManager().getFragments().get(viewPager.getCurrentItem());
+        myFragment.search(text);
     }
 
     @Click(R.id.scan_button)
@@ -144,7 +133,8 @@ public class MyActivity extends AppCompatActivity implements CardAdapter.OnItemC
         if (result != null) {
             if (!TextUtils.isEmpty(result.getContents())) {
                 //TODO call seach(view) - auto searching
-                editText.setText(result.getContents());
+//                editText.setText(result.getContents());
+                search(result.getContents());
             }
         } else {
             // This is important, otherwise the result will not be passed to the fragment
@@ -152,32 +142,71 @@ public class MyActivity extends AppCompatActivity implements CardAdapter.OnItemC
         }
     }
 
-    @Override
-    public void onItemClick(final String name, String isbn, final int position) {
-        new PriceInquiry2Aladin(isbn, new PriceInquiry.OnPriceListener() {
-            @Override
-            public void onPriceResult(List<BookInfoItem> priceList) {
-                if (priceList != null && !priceList.isEmpty()) {
-                    priceList.get(0).company = NetworkConstraint.Company.ALADIN;
-                    recyclerAdapter.updateView(priceList.get(0), position);
-                    recyclerAdapter.notifyItemChanged(position);
+    public class MyPagerAdapter extends FragmentStatePagerAdapter {
+        int[] drawableResId = {R.drawable.logo_aladin, R.drawable.logo_yes24};
 
-                    Toast.makeText(getBaseContext(), "Aladin : " + name + ", " + priceList.toString(), Toast.LENGTH_LONG).show();
-                }
+        public MyPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                case 1:
+                    MyFragment fragment = new MyFragment_();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(COMPANY, position + 1);
+                    fragment.setArguments(bundle);
+                    return fragment;
+                default:
+                    return null;
             }
-        }).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+        }
 
-//        new PriceInquiry2Yes24(isbn, new PriceInquiry.OnPriceListener() {
-//            @Override
-//            public void onPriceResult(List<BookInfoItem> priceList) {
-//                if (priceList != null && !priceList.isEmpty()) {
-//                    priceList.get(0).company = NetworkConstraint.Company.YES24;
-//                    recyclerAdapter.updateView(priceList.get(0), position);
-//                    recyclerAdapter.notifyItemChanged(position);
-//
-//                    Toast.makeText(getBaseContext(), "Yes24 : " + name + ", " + priceList.toString(), Toast.LENGTH_LONG).show();
-//                }
-//            }
-//        }).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Nullable
+        @Override
+        public CharSequence getPageTitle(int position) {
+            Drawable image = getResources().getDrawable(drawableResId[position]);
+            image.setBounds(0, 0, image.getIntrinsicWidth() / 3, image.getIntrinsicHeight() / 3);
+
+            SpannableString sb = new SpannableString(" "/* + getString(tabTitles[position])*/);
+            ImageSpan imageSpan = new ImageSpan(image, ImageSpan.ALIGN_BOTTOM);
+            sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            return sb;
+        }
+
+        //TODO
+        @Override
+        public int getItemPosition(@NonNull Object object) {
+            if (isChangingConfigurations())
+                return POSITION_UNCHANGED;
+            return super.getItemPosition(object);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(COMPANY, tabLayout.getSelectedTabPosition() + 1);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        viewPager.setCurrentItem(savedInstanceState.getInt(COMPANY) - 1);
+    }
+
+    void applyColorFilter(boolean apply) {
+        if (apply)
+            scanButton.setColorFilter(ContextCompat.getColor(getBaseContext(), R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
+        else
+            scanButton.clearColorFilter();
     }
 }

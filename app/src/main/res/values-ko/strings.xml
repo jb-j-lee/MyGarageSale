@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">중고책 판매</string>
+
+    <string name="yes24_button">"YES24"</string>
+    <string name="aladin_button">"ALADIN"</string>
+
+    <string name="scan_button">"카메라로 ISBN 코드를 스캔합니다."</string>
+    <string name="hint_edittext">"제품명 또는 ISBN 을 입력하세요."</string>
+
+    <string name="scan_barcode">"ISBN 코드를 스캔합니다."</string>
+
+    <string name="card_col1">"정가"</string>
+    <string name="card_col2">"매입가 최상"</string>
+    <string name="card_col3">"매입가 상"</string>
+    <string name="card_col4">"매입가 중"</string>
+</resources>

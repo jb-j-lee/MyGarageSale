@@ -2,7 +2,11 @@ package com.myjb.dev.network;
 
 import android.support.annotation.NonNull;
 
+import com.myjb.dev.model.ServiceModel;
+
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class PriceInquiry2Yes24 extends PriceInquiry {
 
@@ -11,6 +15,41 @@ public class PriceInquiry2Yes24 extends PriceInquiry {
     public PriceInquiry2Yes24(@NonNull String query, @NonNull OnPriceListener listener) {
         super(query, listener);
         baseUrl = "http://www.yes24.com/Mall/buyback/Search?CategoryNumber=018&SearchWord=";
+    }
+
+    @NonNull
+    @Override
+    protected Elements getElements(Document doc) {
+        Elements elements = super.getElements(doc);
+
+        if (elements == null)
+            return null;
+
+        Element element = elements.first();
+
+        if (element == null)
+            return null;
+
+        Elements children = element.children();
+
+        if (children == null)
+            return null;
+
+        Elements newElements = new Elements();
+
+        for (Element child : children) {
+//            if (child.getElementsByAttributeValue("class", "chk").size() > 0) {
+//                newElements.add(child);
+//            }
+        }
+
+        return children;
+    }
+
+    @NonNull
+    @Override
+    protected int getCompany() {
+        return ServiceModel.Company.YES24;
     }
 
     @NonNull

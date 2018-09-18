@@ -1,5 +1,7 @@
 package com.myjb.dev.network;
 
+import com.myjb.dev.model.ServiceModel;
+
 public class BookInfoItem {
     public String isbn;
 
@@ -10,23 +12,24 @@ public class BookInfoItem {
     //why string???
     public String price;
     public String best;
-    public String high;
-    public String medium;
+    public String better;
+    public String good;
 
     public BookInfoItem(String isbn) {
         this.isbn = isbn;
-        company = NetworkConstraint.Company.NONE;
-        image = name = price = best = high = medium = null;
+        company = ServiceModel.Company.NONE;
+        image = name = price = best = better = good = null;
     }
 
-    public BookInfoItem(String isbn, String image, String name, String price, String best, String high, String medium) {
+    public BookInfoItem(String isbn, int company, String image, String name, String price, String best, String better, String good) {
         this.isbn = isbn;
+        this.company = company;
         this.image = image;
         this.name = name;
         this.price = price;
         this.best = best;
-        this.high = high;
-        this.medium = medium;
+        this.better = better;
+        this.good = good;
     }
 
     public BookInfoItem(BookInfoItem item) {
@@ -36,8 +39,8 @@ public class BookInfoItem {
         this.name = item.name;
         this.price = item.price;
         this.best = item.best;
-        this.high = item.high;
-        this.medium = item.medium;
+        this.better = item.better;
+        this.good = item.good;
     }
 
     @Override
@@ -48,7 +51,7 @@ public class BookInfoItem {
                 + ", name : " + this.name
                 + ", price : " + this.price
                 + ", best : " + this.best
-                + ", high : " + this.high
-                + ", medium : " + this.medium;
+                + ", better : " + this.better
+                + ", good : " + this.good;
     }
 }

@@ -1,6 +1,6 @@
-package com.myjb.dev.network;
+package com.myjb.dev.model;
 
-public class NetworkConstraint {
+public class ServiceModel {
     public interface Company {
         int NONE = 0;
         int ALADIN = 1;

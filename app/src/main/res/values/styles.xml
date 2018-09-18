@@ -1,42 +1,92 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="@style/Base.Theme.AppCompat.Light.DarkActionBar">
+    <style name="BaseAppTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="myTextView">
-        <item name="android:textColor">#000000</item>
+    <style name="AppTheme" parent="BaseAppTheme" />`
+
+    <style name="MyCollapsingToolbarLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fitsSystemWindows">true</item>
+        <item name="contentScrim">?attr/colorPrimary</item>
+        <item name="layout_scrollFlags">scroll|exitUntilCollapsed</item>
+    </style>
+
+    <style name="MyToolbar" parent="Base.Widget.AppCompat.Toolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?actionBarSize</item>
+        <item name="android:layout_gravity">bottom</item>
+        <item name="layout_collapseMode">pin</item>
+    </style>
+
+    <style name="BaseEditText" parent="Base.Widget.AppCompat.EditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
         <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/colorTextWhite</item>
+        <item name="android:textColorHint">@color/colorTextLightGray</item>
+        <item name="android:imeOptions">flagNoFullscreen|flagNoExtractUi|actionDone</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="MyEditText" parent="BaseEditText" />
+
+    <style name="MyTabLayout" parent="Widget.Design.TabLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="tabIndicatorFullWidth">true</item>
+        <item name="tabSelectedTextColor">@color/colorTextWhite</item>
+        <item name="tabTextColor">@color/colorTextLightGray</item>
+        <item name="tabMode">fixed</item>
+        <item name="tabGravity">fill</item>
+    </style>
+
+    <style name="MyViewPager">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="layout_behavior">@string/appbar_scrolling_view_behavior</item>
+    </style>
+
+    <style name="MyTextView">
+        <item name="android:textColor">@color/colorTextBlack</item>
+        <item name="android:gravity">center</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:duplicateParentState">true</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:singleLine">true</item>
         <item name="android:textAppearance">?android:textAppearanceListItemSmall</item>
-        <item name="android:minHeight">?android:listPreferredItemHeightSmall</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:adjustViewBounds">true</item>
     </style>
 
-    <style name="myBook" parent="myTextView">
-        <item name="android:textSize">20sp</item>
-        <item name="android:shadowColor">#4e000000</item>
-        <item name="android:shadowDy">2</item>
-        <item name="android:shadowRadius">1</item>
-        <item name="android:background">#22000000</item>
-    </style>
-
-    <style name="myPrice" parent="myTextView">
+    <style name="MyBookTitle" parent="MyTextView">
         <item name="android:textSize">15sp</item>
+        <item name="android:minHeight">?android:listPreferredItemHeightSmall</item>
+        <item name="android:gravity">center_vertical|left</item>
+        <item name="android:singleLine">false</item>
     </style>
 
-    <style name="myImageButton">
+    <style name="MyBookCol" parent="MyTextView"></style>
+
+    <style name="MyBookPrice" parent="MyTextView"></style>
+
+    <style name="MyImageButton" parent="Base.Widget.AppCompat.ImageButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@drawable/btn_background</item>
-        <item name="layout_constraintTop_toTopOf">parent</item>
-        <item name="layout_constraintBottom_toTopOf">@id/recyclerView</item>
-        <item name="layout_constraintVertical_bias">0.5</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:gravity">center</item>
+        <item name="android:contentDescription">@null</item>
+        <item name="android:background">@null</item>
     </style>
+
 </resources>

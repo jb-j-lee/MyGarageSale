@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.myjb.dev.model.ServiceModel;
 import com.myjb.dev.mygaragesale.BuildConfig;
 
 import org.jsoup.Jsoup;
@@ -20,7 +21,7 @@ import java.util.List;
 public class PriceInquiry extends AsyncTask<Void, Void, List<BookInfoItem>> {
 
     public interface OnPriceListener {
-        void onPriceResult(List<BookInfoItem> priceList);
+        void onPriceResult(@NonNull List<BookInfoItem> priceList);
     }
 
     protected final static String TAG = "PriceInquiry";
@@ -50,29 +51,37 @@ public class PriceInquiry extends AsyncTask<Void, Void, List<BookInfoItem>> {
     }
 
     protected List<BookInfoItem> getPriceInfo(String url) {
+        Document doc = null;
+        Elements elements = null;
+
         try {
             long init = System.currentTimeMillis();
 
-            Document doc = getDocument(url);
+            doc = getDocument(url);
 
             long connect = System.currentTimeMillis();
 
-            Elements elements = getElements(doc);
+            elements = getElements(doc);
 
             long select = System.currentTimeMillis();
 
-            List<BookInfoItem> priceList = getItems(elements);
+            List<BookInfoItem> bookInfoList = getItems(elements);
 
             if (BuildConfig.DEBUG)
                 Log.e(TAG, "[basicVersion] connect : " + (connect - init) + ", select : " + (select - connect) + ", add : " + (System.currentTimeMillis() - select));
 
-            return priceList;
+            return bookInfoList;
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            if (elements != null)
+                elements = null;
+            if (doc != null)
+                doc = null;
         }
 
         return null;
@@ -82,7 +91,8 @@ public class PriceInquiry extends AsyncTask<Void, Void, List<BookInfoItem>> {
         return Jsoup.connect(url).get();
     }
 
-    private Elements getElements(Document doc) {
+    @NonNull
+    protected Elements getElements(Document doc) {
         String filter = getBasicFilter();
         if (BuildConfig.DEBUG)
             Log.e(TAG, "[basicVersion] filter : " + filter);
@@ -92,7 +102,7 @@ public class PriceInquiry extends AsyncTask<Void, Void, List<BookInfoItem>> {
 
     @NonNull
     private List<BookInfoItem> getItems(Elements elements) {
-        List<BookInfoItem> priceList = new ArrayList<>();
+        List<BookInfoItem> bookInfoList = new ArrayList<>();
         for (Element element : elements) {
             String isbn = getISBN(element);
             Log.e(TAG, "[basicVersion] isbn : " + isbn);
@@ -104,13 +114,19 @@ public class PriceInquiry extends AsyncTask<Void, Void, List<BookInfoItem>> {
             Log.e(TAG, "[basicVersion] getNameFilter() : " + getNameFilter() + ", name : " + name);
 
             String[] price = element.select(getPriceFilter()).text().split("원");
-            if (price != null)
-                priceList.add(new BookInfoItem(isbn, image, name, price[0], price[1], price[2], price[3]));
+            if (price != null && price.length > 1)
+                bookInfoList.add(new BookInfoItem(isbn, getCompany(), image, name, price[0], price[1], price[2], price[3]));
         }
 
         if (BuildConfig.DEBUG)
-            Log.e(TAG, "[basicVersion] list.size : " + priceList.size());
-        return priceList;
+            Log.e(TAG, "[basicVersion] list.size : " + bookInfoList.size());
+
+        return bookInfoList;
+    }
+
+    @NonNull
+    protected int getCompany() {
+        return ServiceModel.Company.NONE;
     }
 
     @NonNull

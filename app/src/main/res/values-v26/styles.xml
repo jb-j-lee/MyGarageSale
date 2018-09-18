@@ -1,0 +1,6 @@
+<resources>
+
+    <style name="MyEditText" parent="BaseEditText">
+        <item name="android:focusedByDefault">false</item>
+    </style>
+</resources>

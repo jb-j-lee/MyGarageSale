@@ -2,9 +2,9 @@ package com.myjb.dev.view;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -13,19 +13,14 @@ import android.view.View;
 
 import com.myjb.dev.mygaragesale.R;
 
-public class ClearEditText extends AppCompatEditText implements TextWatcher, View.OnTouchListener, View.OnFocusChangeListener {
+public class ClearEditText extends TextInputEditText implements TextWatcher, View.OnTouchListener, View.OnFocusChangeListener {
 
     final int DRAWABLE_LEFT = 0;
     final int DRAWABLE_TOP = 1;
     final int DRAWABLE_RIGHT = 2;
     final int DRAWABLE_BOTTOM = 3;
 
-    public interface OnTextChangeListener {
-        void onTextChange(int length);
-    }
-
     Drawable clearDrawable = null;
-    OnTextChangeListener listener = null;
 
     public ClearEditText(Context context) {
         this(context, null);
@@ -61,10 +56,6 @@ public class ClearEditText extends AppCompatEditText implements TextWatcher, Vie
         setCompoundDrawables(null, null, visible ? clearDrawable : null, null);
     }
 
-    public void setOnTextChangeListener(OnTextChangeListener listener) {
-        this.listener = listener;
-    }
-
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
     }
@@ -76,9 +67,6 @@ public class ClearEditText extends AppCompatEditText implements TextWatcher, Vie
     @Override
     public void afterTextChanged(Editable s) {
         setClearIconVisible(isFocused() && s.length() > 0);
-
-        if (listener != null)
-            listener.onTextChange(s.length());
     }
 
     @Override
@@ -95,6 +83,8 @@ public class ClearEditText extends AppCompatEditText implements TextWatcher, Vie
             if (event.getRawX() >= (getRight() - getPaddingRight() - getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                 setText(null);
                 setError(null);
+                if (getHint() != null)
+                    setHint(R.string.hint_edittext);
                 return true;
             }
         }
@@ -103,7 +93,6 @@ public class ClearEditText extends AppCompatEditText implements TextWatcher, Vie
 
     @Override
     protected void onDetachedFromWindow() {
-        listener = null;
         clearDrawable = null;
         super.onDetachedFromWindow();
     }

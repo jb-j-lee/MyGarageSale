@@ -15,17 +15,17 @@
 
     <TextView
         android:id="@+id/price"
-        style="@style/myPrice" />
+        style="@style/MyBookPrice" />
 
     <TextView
         android:id="@+id/best"
-        style="@style/myPrice" />
+        style="@style/MyBookPrice" />
 
     <TextView
-        android:id="@+id/high"
-        style="@style/myPrice" />
+        android:id="@+id/better"
+        style="@style/MyBookPrice" />
 
     <TextView
-        android:id="@+id/medium"
-        style="@style/myPrice" />
+        android:id="@+id/good"
+        style="@style/MyBookPrice" />
 </LinearLayout>

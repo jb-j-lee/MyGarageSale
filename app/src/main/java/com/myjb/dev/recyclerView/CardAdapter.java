@@ -1,20 +1,26 @@
 package com.myjb.dev.recyclerView;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
-import com.myjb.dev.mygaragesale.R;
+import com.myjb.dev.model.ServiceModel;
 import com.myjb.dev.network.BookInfoItem;
-import com.myjb.dev.network.NetworkConstraint;
 
 import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.RootContext;
-import org.androidannotations.annotations.res.StringArrayRes;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +34,8 @@ public class CardAdapter extends RecyclerViewAdapterBase<String, ItemView> {
     @RootContext
     Context context;
 
-    @StringArrayRes(R.array.book_isbn)
-    String[] isbns;
+//    @StringArrayRes(R.array.book_isbn)
+//    String[] isbns;
 
     @NonNull
     List<BookInfoItem> itemList;
@@ -44,10 +50,10 @@ public class CardAdapter extends RecyclerViewAdapterBase<String, ItemView> {
     void bind() {
         itemList = new ArrayList<>();
 
-        for (int i = 0; i < isbns.length; i++) {
-            BookInfoItem item = new BookInfoItem(isbns[i]);
-            itemList.add(i, item);
-        }
+//        for (int i = 0; i < isbns.length; i++) {
+//            BookInfoItem item = new BookInfoItem(isbns[i]);
+//            itemList.add(i, item);
+//        }
     }
 
     @Override
@@ -56,33 +62,45 @@ public class CardAdapter extends RecyclerViewAdapterBase<String, ItemView> {
     }
 
     @Override
-    public void onBindViewHolder(ViewWrapper<ItemView> viewHolder, final int position) {
+    public void onBindViewHolder(ViewWrapper<ItemView> viewHolder, int position) {
         Log.e("", "[onBindViewHolder] position : " + position + ", nameList : " + itemList.size());
 
-        if (itemList.get(position).company == NetworkConstraint.Company.NONE) {
-            String name = isbns[position];
+        final BookInfoItem item = itemList.get(position);
 
-            ItemView view = viewHolder.getView();
-            view.bind(name);
+        if (item.company == ServiceModel.Company.NONE)
+            return;
 
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mOnItemClickListener != null)
-                        mOnItemClickListener.onItemClick(isbns[position], isbns[position], position);
+        final ItemView view = viewHolder.getView();
+        view.bind(item);
+
+        //TODO
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final ImageView imageView = ((CardItemView) view).image;
+                final Bitmap bitmap = getBitmap(item.image);
+                if (bitmap != null) {
+                    ((Activity) context).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.e("TEST", "" + bitmap.getHeight() + ", " + bitmap.getWidth());
+
+                            imageView.setMinimumHeight(bitmap.getHeight());
+                            imageView.setMinimumWidth(bitmap.getWidth());
+                            imageView.setImageBitmap(bitmap);
+                        }
+                    });
                 }
-            });
-        } else {
-            ItemView view = viewHolder.getView();
-            view.bind(itemList.get(position));
-
-            view.setOnClickListener(null);
-        }
+            }
+        }).start();
     }
 
     @Override
     public int getItemViewType(int position) {
-        return 1;
+        if (itemList.isEmpty())
+            return 1;
+
+        return itemList.get(position).company;
     }
 
     @Override
@@ -97,7 +115,45 @@ public class CardAdapter extends RecyclerViewAdapterBase<String, ItemView> {
         mOnItemClickListener = listener;
     }
 
-    public void updateView(BookInfoItem item, int position) {
-        itemList.set(position, new BookInfoItem(item));
+    public void updateView(List<BookInfoItem> items) {
+        itemList.clear();
+        itemList.addAll(items);
+        notifyDataSetChanged();
+    }
+
+    public void clearView() {
+        itemList.clear();
+    }
+
+    private Bitmap getBitmap(final String imageUrl) {
+        URL url = null;
+        HttpURLConnection urlConnection = null;
+        InputStream inputStream = null;
+        Bitmap bitmap = null;
+        try {
+            url = new URL(imageUrl);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setDoInput(true);
+
+            inputStream = urlConnection.getInputStream();
+            bitmap = BitmapFactory.decodeStream(inputStream);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            bitmap = null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            bitmap = null;
+        } finally {
+            try {
+                if (inputStream != null)
+                    inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (urlConnection != null)
+                urlConnection.disconnect();
+            return bitmap;
+        }
     }
 }

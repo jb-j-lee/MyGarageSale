@@ -8,4 +8,9 @@
     <string name="hint_edittext">"Enter the product name or ISBN."</string>
 
     <string name="scan_barcode">"Scan ISBN barcode."</string>
+
+    <string name="card_col1">"price"</string>
+    <string name="card_col2">"best"</string>
+    <string name="card_col3">"better"</string>
+    <string name="card_col4">"good"</string>
 </resources>
