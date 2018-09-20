@@ -22,18 +22,15 @@ public class PriceInquiry2Aladin extends PriceInquiry {
     protected Elements getElements(Document doc) {
         Elements elements = super.getElements(doc);
 
-        if (elements == null)
-            return null;
-
         Element element = elements.first();
 
         if (element == null)
-            return null;
+            return new Elements();
 
         Element child0 = element.child(0);
 
         if (child0 == null)
-            return null;
+            return new Elements();
 
         Elements children = child0.children();
 
@@ -48,7 +45,6 @@ public class PriceInquiry2Aladin extends PriceInquiry {
         return newElements;
     }
 
-    @NonNull
     @Override
     protected int getCompany() {
         return ServiceModel.Company.ALADIN;

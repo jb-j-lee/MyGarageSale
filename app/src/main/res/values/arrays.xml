@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string-array name="book_name">
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string-array name="book_name" tools:ignore="MissingTranslation">
         <item>"입사 후 3년"</item>
         <item>"회사가 원하는 전략형 인간"</item>
         <item>"회사가 붙잡는 사람들의 1% 비밀"</item>
@@ -31,7 +31,7 @@
         <item>"누워서 읽는 알고리즘"</item>
         <item>"좋은 프로그래밍 습관 : 경쟁력을 갖춘 전문가의 작은 차이"</item>
     </string-array>
-    <string-array name="book_isbn">
+    <string-array name="book_isbn" tools:ignore="MissingTranslation">
         <item>9788960862609</item>
         <item>9788996156970</item>
         <item>9788960861626</item>

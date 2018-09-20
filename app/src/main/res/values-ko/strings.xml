@@ -1,9 +1,6 @@
 <resources>
     <string name="app_name">중고책 판매</string>
 
-    <string name="yes24_button">"YES24"</string>
-    <string name="aladin_button">"ALADIN"</string>
-
     <string name="scan_button">"카메라로 ISBN 코드를 스캔합니다."</string>
     <string name="hint_edittext">"제품명 또는 ISBN 을 입력하세요."</string>
 

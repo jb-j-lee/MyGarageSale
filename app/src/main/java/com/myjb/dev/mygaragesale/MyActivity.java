@@ -3,6 +3,7 @@ package com.myjb.dev.mygaragesale;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,6 +21,7 @@ import android.text.style.ImageSpan;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -38,6 +40,7 @@ import org.androidannotations.annotations.ViewById;
 public class MyActivity extends AppCompatActivity {
 
     public static final String COMPANY = "COMPANY";
+    public static final String SEARCHED = "SEARCHED";
 
     @ViewById(R.id.scan_button)
     ImageButton scanButton;
@@ -63,16 +66,6 @@ public class MyActivity extends AppCompatActivity {
 
     @AfterViews
     void bindViews() {
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    search(editText.getText().toString());
-                }
-                return false;
-            }
-        });
-
         scanButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -94,15 +87,51 @@ public class MyActivity extends AppCompatActivity {
             }
         });
 
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    search(editText.getText().toString());
+                }
+                return false;
+            }
+        });
+
         pagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(pagerAdapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (!TextUtils.isEmpty(editText.getText().toString()))
+                    search(editText.getText().toString());
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
         tabLayout.setupWithViewPager(viewPager);
+
+        if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+            ViewGroup view = (ViewGroup) tabLayout.getChildAt(0);
+
+            int childCount = view.getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                ViewGroup viewGroup = (ViewGroup) view.getChildAt(i);
+                ((TextView) viewGroup.getChildAt(1)).setAllCaps(false);
+            }
+        }
 
         if (BuildConfig.DEBUG) {
             editText.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    search("docker");
+                    editText.setText("무례한 사람에게 웃으며 대처하는 법");
+                    search(editText.getText().toString());
                 }
             }, 1000);
         }
@@ -118,7 +147,7 @@ public class MyActivity extends AppCompatActivity {
     }
 
     @Click(R.id.scan_button)
-    public void scanBarcode(View view) {
+    public void scanBarcode() {
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
         integrator.setPrompt(getString(R.string.scan_barcode));
@@ -131,10 +160,10 @@ public class MyActivity extends AppCompatActivity {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
 
         if (result != null) {
-            if (!TextUtils.isEmpty(result.getContents())) {
-                //TODO call seach(view) - auto searching
-//                editText.setText(result.getContents());
-                search(result.getContents());
+            String text = result.getContents();
+            if (!TextUtils.isEmpty(text)) {
+                editText.setText(text);
+                search(text);
             }
         } else {
             // This is important, otherwise the result will not be passed to the fragment
@@ -144,6 +173,7 @@ public class MyActivity extends AppCompatActivity {
 
     public class MyPagerAdapter extends FragmentStatePagerAdapter {
         int[] drawableResId = {R.drawable.logo_aladin, R.drawable.logo_yes24};
+        int[] tabTitles = {R.string.aladin_button, R.string.yes24_button};
 
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -173,21 +203,13 @@ public class MyActivity extends AppCompatActivity {
         @Override
         public CharSequence getPageTitle(int position) {
             Drawable image = getResources().getDrawable(drawableResId[position]);
-            image.setBounds(0, 0, image.getIntrinsicWidth() / 3, image.getIntrinsicHeight() / 3);
+            image.setBounds(0, 0, image.getIntrinsicWidth() / 2, image.getIntrinsicHeight() / 2);
 
-            SpannableString sb = new SpannableString(" "/* + getString(tabTitles[position])*/);
+            SpannableString sb = new SpannableString(" " /*+ getString(tabTitles[position])*/);
             ImageSpan imageSpan = new ImageSpan(image, ImageSpan.ALIGN_BOTTOM);
             sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             return sb;
-        }
-
-        //TODO
-        @Override
-        public int getItemPosition(@NonNull Object object) {
-            if (isChangingConfigurations())
-                return POSITION_UNCHANGED;
-            return super.getItemPosition(object);
         }
     }
 
@@ -195,11 +217,15 @@ public class MyActivity extends AppCompatActivity {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(COMPANY, tabLayout.getSelectedTabPosition() + 1);
+        outState.putString(SEARCHED, editText.getText().toString());
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+        String searched = savedInstanceState.getString(SEARCHED, null);
+        if (!TextUtils.isEmpty(searched))
+            editText.setText(searched);
         viewPager.setCurrentItem(savedInstanceState.getInt(COMPANY) - 1);
     }
 

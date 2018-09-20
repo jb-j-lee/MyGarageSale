@@ -22,31 +22,19 @@ public class PriceInquiry2Yes24 extends PriceInquiry {
     protected Elements getElements(Document doc) {
         Elements elements = super.getElements(doc);
 
-        if (elements == null)
-            return null;
-
         Element element = elements.first();
 
         if (element == null)
-            return null;
+            return new Elements();
 
         Elements children = element.children();
 
         if (children == null)
-            return null;
-
-        Elements newElements = new Elements();
-
-        for (Element child : children) {
-//            if (child.getElementsByAttributeValue("class", "chk").size() > 0) {
-//                newElements.add(child);
-//            }
-        }
+            return new Elements();
 
         return children;
     }
 
-    @NonNull
     @Override
     protected int getCompany() {
         return ServiceModel.Company.YES24;

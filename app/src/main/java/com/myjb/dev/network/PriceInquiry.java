@@ -13,7 +13,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +23,7 @@ import java.util.List;
 public class PriceInquiry extends AsyncTask<Void, Void, List<BookInfoItem>> {
 
     public interface OnPriceListener {
-        void onPriceResult(@NonNull List<BookInfoItem> priceList);
+        void onPriceResult(List<BookInfoItem> priceList);
     }
 
     protected final static String TAG = "PriceInquiry";
@@ -37,7 +39,13 @@ public class PriceInquiry extends AsyncTask<Void, Void, List<BookInfoItem>> {
 
     @Override
     protected List<BookInfoItem> doInBackground(Void... params) {
-        String url = baseUrl + query;
+        String url = null;
+        try {
+            url = baseUrl + URLEncoder.encode(query, "EUC-KR");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
         if (BuildConfig.DEBUG)
             Log.e(TAG, "[basicVersion] url : " + url);
 
@@ -52,7 +60,7 @@ public class PriceInquiry extends AsyncTask<Void, Void, List<BookInfoItem>> {
 
     protected List<BookInfoItem> getPriceInfo(String url) {
         Document doc = null;
-        Elements elements = null;
+        Elements elements = new Elements();
 
         try {
             long init = System.currentTimeMillis();
@@ -94,6 +102,7 @@ public class PriceInquiry extends AsyncTask<Void, Void, List<BookInfoItem>> {
     @NonNull
     protected Elements getElements(Document doc) {
         String filter = getBasicFilter();
+
         if (BuildConfig.DEBUG)
             Log.e(TAG, "[basicVersion] filter : " + filter);
 
@@ -105,16 +114,22 @@ public class PriceInquiry extends AsyncTask<Void, Void, List<BookInfoItem>> {
         List<BookInfoItem> bookInfoList = new ArrayList<>();
         for (Element element : elements) {
             String isbn = getISBN(element);
-            Log.e(TAG, "[basicVersion] isbn : " + isbn);
+
+            if (BuildConfig.DEBUG)
+                Log.e(TAG, "[basicVersion] isbn : " + isbn);
 
             String image = element.select(getImageFilter()).attr("src");
-            Log.e(TAG, "[basicVersion] getImageFilter() : " + getImageFilter() + ", image : " + image);
+
+            if (BuildConfig.DEBUG)
+                Log.e(TAG, "[basicVersion] getImageFilter() : " + getImageFilter() + ", image : " + image);
 
             String name = element.select(getNameFilter()).text();
-            Log.e(TAG, "[basicVersion] getNameFilter() : " + getNameFilter() + ", name : " + name);
+
+            if (BuildConfig.DEBUG)
+                Log.e(TAG, "[basicVersion] getNameFilter() : " + getNameFilter() + ", name : " + name);
 
             String[] price = element.select(getPriceFilter()).text().split("원");
-            if (price != null && price.length > 1)
+            if (price.length > 1)
                 bookInfoList.add(new BookInfoItem(isbn, getCompany(), image, name, price[0], price[1], price[2], price[3]));
         }
 
@@ -124,19 +139,18 @@ public class PriceInquiry extends AsyncTask<Void, Void, List<BookInfoItem>> {
         return bookInfoList;
     }
 
-    @NonNull
     protected int getCompany() {
         return ServiceModel.Company.NONE;
     }
 
     @NonNull
     protected String getBasicFilter() {
-        return null;
+        return "";
     }
 
     @NonNull
     protected String getISBN(Element element) {
-        return null;
+        return "";
     }
 
     @NonNull
@@ -146,11 +160,11 @@ public class PriceInquiry extends AsyncTask<Void, Void, List<BookInfoItem>> {
 
     @NonNull
     protected String getNameFilter() {
-        return null;
+        return "";
     }
 
     @NonNull
     protected String getPriceFilter() {
-        return null;
+        return "";
     }
 }

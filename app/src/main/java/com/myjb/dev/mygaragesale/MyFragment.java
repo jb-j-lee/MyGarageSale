@@ -9,7 +9,6 @@ import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +45,8 @@ public class MyFragment extends Fragment implements CardAdapter.OnItemClickListe
     @Bean
     CardAdapter recyclerAdapter;
 
-    private int company;
+    int company;
+    String searchText;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,20 +59,17 @@ public class MyFragment extends Fragment implements CardAdapter.OnItemClickListe
             company = bundle.getInt(COMPANY, ServiceModel.Company.NONE);
         }
 
-        Log.e("TEST", "[onCreate] company : " + company);
+        searchText = null;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.e("TEST", "[onCreateView] company : " + company);
         return inflater.inflate(R.layout.fragment_main, container, false);
     }
 
     @AfterViews
     void bindAdapter() {
-        Log.e("TEST", "[bindAdapter] company : " + company);
-
         recyclerAdapter.setOnItemClickListener(this);
 
         recyclerView.setAdapter(recyclerAdapter);
@@ -91,44 +88,42 @@ public class MyFragment extends Fragment implements CardAdapter.OnItemClickListe
     public void onItemClick(String name, String isbn, final int position) {
     }
 
-    @Override
-    public void onDestroyView() {
-        Log.e("TEST", "[onDestroyView] company : " + company);
-        super.onDestroyView();
-    }
-
-    @Override
-    public void onDestroy() {
-        Log.e("TEST", "[onDestroy] company : " + company);
-        super.onDestroy();
+    public boolean isSearched(String text) {
+        return text.equalsIgnoreCase(searchText);
     }
 
     public void search(String text) {
-        setProgressVisibility(true);
-
         if (TextUtils.isEmpty(text)) {
             onPriceResult(null);
         } else {
+            if (isSearched(text))
+                return;
+
+            searchText = text;
+
+            setProgressVisibility(true);
+
             PriceInquiry priceInquiry = null;
             if (company == ServiceModel.Company.ALADIN) {
                 priceInquiry = new PriceInquiry2Aladin(text, this);
             } else if (company == ServiceModel.Company.YES24) {
                 priceInquiry = new PriceInquiry2Yes24(text, this);
             }
-            priceInquiry.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+            if (priceInquiry != null)
+                priceInquiry.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
         }
     }
 
     @Override
-    public void onPriceResult(@NonNull List<BookInfoItem> priceList) {
+    public void onPriceResult(List<BookInfoItem> priceList) {
         setProgressVisibility(false);
 
-        if (priceList != null && !priceList.isEmpty()) {
-            setEmptyViewVisibility(false);
-            recyclerAdapter.updateView(priceList);
-        } else {
+        if (priceList == null || priceList.isEmpty()) {
             setEmptyViewVisibility(true);
             recyclerAdapter.clearView();
+        } else {
+            setEmptyViewVisibility(false);
+            recyclerAdapter.updateView(priceList);
         }
     }
 

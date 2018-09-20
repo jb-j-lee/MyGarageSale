@@ -20,11 +20,11 @@ import java.util.List;
 @EBean
 public class PriceAdapter extends RecyclerViewAdapterBase<String, ItemView> {
 
-    public interface OnItemClickListener {
+    interface OnItemClickListener {
         void onItemClick(String name, String isbn, int position);
     }
 
-    enum VIEWTYPE {
+    enum VIEW_TYPE {
         BOOK, PRICE
     }
 
@@ -35,10 +35,10 @@ public class PriceAdapter extends RecyclerViewAdapterBase<String, ItemView> {
     String[] names;
 
     @StringArrayRes(R.array.book_isbn)
-    String[] isbns;
+    String[] isbn;
 
     @NonNull
-    List<PriceItem> itemList;
+    List<PriceItem> itemList = new ArrayList<>();
 
     OnItemClickListener mOnItemClickListener;
 
@@ -59,15 +59,15 @@ public class PriceAdapter extends RecyclerViewAdapterBase<String, ItemView> {
     }
 
     @Override
-    protected ItemView onCreateItemView(ViewGroup parent, int viewType) {
-        if (viewType == VIEWTYPE.BOOK.ordinal())
+    protected ItemView onCreateItemView(@NonNull ViewGroup parent, int viewType) {
+        if (viewType == VIEW_TYPE.BOOK.ordinal())
             return BookItemView_.build(context);
         else
             return PriceItemView_.build(context);
     }
 
     @Override
-    public void onBindViewHolder(ViewWrapper<ItemView> viewHolder, final int position) {
+    public void onBindViewHolder(@NonNull ViewWrapper<ItemView> viewHolder, final int position) {
         Log.e("", "[onBindViewHolder] position : " + position + ", nameList : " + itemList.size());
 
         if (position % 3 == 0) {
@@ -81,7 +81,7 @@ public class PriceAdapter extends RecyclerViewAdapterBase<String, ItemView> {
                 @Override
                 public void onClick(View v) {
                     if (mOnItemClickListener != null)
-                        mOnItemClickListener.onItemClick(names[offset], isbns[offset], offset);
+                        mOnItemClickListener.onItemClick(names[offset], isbn[offset], offset);
                 }
             });
         } else {
@@ -96,15 +96,12 @@ public class PriceAdapter extends RecyclerViewAdapterBase<String, ItemView> {
     @Override
     public int getItemViewType(int position) {
         if (position % 3 == 0)
-            return VIEWTYPE.BOOK.ordinal();
-        return VIEWTYPE.PRICE.ordinal();
+            return VIEW_TYPE.BOOK.ordinal();
+        return VIEW_TYPE.PRICE.ordinal();
     }
 
     @Override
     public int getItemCount() {
-        if (itemList == null)
-            return 0;
-
         return names.length + itemList.size();
     }
 

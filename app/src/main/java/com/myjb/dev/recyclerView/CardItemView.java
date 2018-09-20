@@ -1,8 +1,6 @@
 package com.myjb.dev.recyclerView;
 
 import android.content.Context;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -40,8 +38,8 @@ public class CardItemView extends ItemView {
     @Override
     protected void bind(Object item) {
         if (item instanceof BookInfoItem) {
-            Animation animation = AnimationUtils.loadAnimation(getContext(), android.R.anim.slide_in_left);
-            startAnimation(animation);
+//            Animation animation = AnimationUtils.loadAnimation(getContext(), android.R.anim.slide_in_left);
+//            startAnimation(animation);
 
             BookInfoItem bookInfoItem = (BookInfoItem) item;
 

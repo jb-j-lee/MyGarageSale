@@ -1,7 +1,6 @@
 package com.myjb.dev.recyclerView;
 
 import android.content.Context;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.myjb.dev.mygaragesale.R;
@@ -12,9 +11,6 @@ import org.androidannotations.annotations.ViewById;
 
 @EViewGroup(R.layout.item_recyclerview_price)
 public class PriceItemView extends ItemView {
-
-    @ViewById(R.id.company)
-    ImageView company;
 
     @ViewById(R.id.price)
     TextView price;

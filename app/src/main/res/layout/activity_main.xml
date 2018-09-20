@@ -34,6 +34,7 @@
                 <ImageButton
                     android:id="@+id/scan_button"
                     style="@style/MyImageButton"
+                    android:contentDescription="@string/scan_button"
                     android:src="@drawable/barcode" />
 
                 <android.support.design.widget.TextInputLayout

@@ -5,14 +5,12 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.myjb.dev.model.ServiceModel;
 import com.myjb.dev.network.BookInfoItem;
 
-import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.RootContext;
 
@@ -27,6 +25,8 @@ import java.util.List;
 @EBean
 public class CardAdapter extends RecyclerViewAdapterBase<String, ItemView> {
 
+    final int BOOK_WIDTH = 200;
+
     public interface OnItemClickListener {
         void onItemClick(String name, String isbn, int position);
     }
@@ -34,11 +34,8 @@ public class CardAdapter extends RecyclerViewAdapterBase<String, ItemView> {
     @RootContext
     Context context;
 
-//    @StringArrayRes(R.array.book_isbn)
-//    String[] isbns;
-
     @NonNull
-    List<BookInfoItem> itemList;
+    List<BookInfoItem> itemList = new ArrayList<>();
 
     OnItemClickListener mOnItemClickListener;
 
@@ -46,25 +43,13 @@ public class CardAdapter extends RecyclerViewAdapterBase<String, ItemView> {
         this.context = context;
     }
 
-    @AfterInject
-    void bind() {
-        itemList = new ArrayList<>();
-
-//        for (int i = 0; i < isbns.length; i++) {
-//            BookInfoItem item = new BookInfoItem(isbns[i]);
-//            itemList.add(i, item);
-//        }
-    }
-
     @Override
-    protected ItemView onCreateItemView(ViewGroup parent, int viewType) {
+    protected ItemView onCreateItemView(@NonNull ViewGroup parent, int viewType) {
         return CardItemView_.build(context);
     }
 
     @Override
-    public void onBindViewHolder(ViewWrapper<ItemView> viewHolder, int position) {
-        Log.e("", "[onBindViewHolder] position : " + position + ", nameList : " + itemList.size());
-
+    public void onBindViewHolder(@NonNull ViewWrapper<ItemView> viewHolder, int position) {
         final BookInfoItem item = itemList.get(position);
 
         if (item.company == ServiceModel.Company.NONE)
@@ -73,7 +58,6 @@ public class CardAdapter extends RecyclerViewAdapterBase<String, ItemView> {
         final ItemView view = viewHolder.getView();
         view.bind(item);
 
-        //TODO
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -83,10 +67,12 @@ public class CardAdapter extends RecyclerViewAdapterBase<String, ItemView> {
                     ((Activity) context).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Log.e("TEST", "" + bitmap.getHeight() + ", " + bitmap.getWidth());
+                            int width = BOOK_WIDTH;
+                            int height = BOOK_WIDTH * bitmap.getHeight() / bitmap.getWidth();
 
-                            imageView.setMinimumHeight(bitmap.getHeight());
-                            imageView.setMinimumWidth(bitmap.getWidth());
+                            imageView.setMinimumWidth(width);
+                            imageView.setMinimumHeight(height);
+
                             imageView.setImageBitmap(bitmap);
                         }
                     });
@@ -105,9 +91,6 @@ public class CardAdapter extends RecyclerViewAdapterBase<String, ItemView> {
 
     @Override
     public int getItemCount() {
-        if (itemList == null)
-            return 0;
-
         return itemList.size();
     }
 
@@ -126,24 +109,27 @@ public class CardAdapter extends RecyclerViewAdapterBase<String, ItemView> {
     }
 
     private Bitmap getBitmap(final String imageUrl) {
-        URL url = null;
         HttpURLConnection urlConnection = null;
         InputStream inputStream = null;
-        Bitmap bitmap = null;
         try {
-            url = new URL(imageUrl);
+            URL url = new URL(imageUrl);
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.setDoInput(true);
 
             inputStream = urlConnection.getInputStream();
-            bitmap = BitmapFactory.decodeStream(inputStream);
+
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = false;
+            options.inScaled = false;
+
+
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream, null, options);
+            return bitmap;
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            bitmap = null;
         } catch (IOException e) {
             e.printStackTrace();
-            bitmap = null;
         } finally {
             try {
                 if (inputStream != null)
@@ -153,7 +139,7 @@ public class CardAdapter extends RecyclerViewAdapterBase<String, ItemView> {
             }
             if (urlConnection != null)
                 urlConnection.disconnect();
-            return bitmap;
         }
+        return null;
     }
 }
