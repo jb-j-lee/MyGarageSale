@@ -6,11 +6,11 @@ public class PriceItem {
     public String better;
     public String good;
 
-    public PriceItem(String price, String best, String better, String good) {
-        this.price = price;
-        this.best = best;
-        this.better = better;
-        this.good = good;
+    public PriceItem(String[] price) {
+        this.price = price[0];
+        this.best = price[1];
+        this.better = price[2];
+        this.good = price[3];
     }
 
     public PriceItem(PriceItem item) {

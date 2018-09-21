@@ -52,7 +52,7 @@ public class PriceAdapter extends RecyclerViewAdapterBase<String, ItemView> {
 
         //TODO
         for (int i = 0; i < names.length; i++) {
-            PriceItem item = new PriceItem(null, null, null, null);
+            PriceItem item = new PriceItem(new String[]{"0",});
             itemList.add(2 * i, item);
             itemList.add(2 * i + 1, item);
         }

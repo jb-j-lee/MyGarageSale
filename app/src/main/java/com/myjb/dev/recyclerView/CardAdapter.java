@@ -108,6 +108,7 @@ public class CardAdapter extends RecyclerViewAdapterBase<String, ItemView> {
         itemList.clear();
     }
 
+    //TODO Use cache control
     private Bitmap getBitmap(final String imageUrl) {
         HttpURLConnection urlConnection = null;
         InputStream inputStream = null;
@@ -119,12 +120,7 @@ public class CardAdapter extends RecyclerViewAdapterBase<String, ItemView> {
 
             inputStream = urlConnection.getInputStream();
 
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = false;
-            options.inScaled = false;
-
-
-            Bitmap bitmap = BitmapFactory.decodeStream(inputStream, null, options);
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
             return bitmap;
         } catch (MalformedURLException e) {
             e.printStackTrace();

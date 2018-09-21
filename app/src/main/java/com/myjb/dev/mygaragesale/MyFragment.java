@@ -31,7 +31,7 @@ import java.util.List;
 import static com.myjb.dev.mygaragesale.MyActivity.COMPANY;
 
 @EFragment(R.layout.fragment_main)
-public class MyFragment extends Fragment implements CardAdapter.OnItemClickListener, PriceInquiry.OnPriceListener {
+public class MyFragment extends Fragment implements PriceInquiry.OnPriceListener {
 
     @ViewById(R.id.recyclerView)
     RecyclerView recyclerView;
@@ -70,8 +70,6 @@ public class MyFragment extends Fragment implements CardAdapter.OnItemClickListe
 
     @AfterViews
     void bindAdapter() {
-        recyclerAdapter.setOnItemClickListener(this);
-
         recyclerView.setAdapter(recyclerAdapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -84,11 +82,8 @@ public class MyFragment extends Fragment implements CardAdapter.OnItemClickListe
         setEmptyViewVisibility(true);
     }
 
-    @Override
-    public void onItemClick(String name, String isbn, final int position) {
-    }
-
-    public boolean isSearched(String text) {
+    boolean isSearched(String text) {
+        //TODO Handling Error
         return text.equalsIgnoreCase(searchText);
     }
 
@@ -96,6 +91,7 @@ public class MyFragment extends Fragment implements CardAdapter.OnItemClickListe
         if (TextUtils.isEmpty(text)) {
             onPriceResult(null);
         } else {
+            //TODO Handling Error
             if (isSearched(text))
                 return;
 

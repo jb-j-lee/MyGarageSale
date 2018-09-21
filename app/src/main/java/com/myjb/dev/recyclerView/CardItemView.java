@@ -1,6 +1,7 @@
 package com.myjb.dev.recyclerView;
 
 import android.content.Context;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,6 +19,9 @@ public class CardItemView extends ItemView {
 
     @ViewById(R.id.name)
     TextView name;
+
+    @ViewById(R.id.save)
+    ImageView save;
 
     @ViewById(R.id.price)
     TextView price;
@@ -44,11 +48,16 @@ public class CardItemView extends ItemView {
             BookInfoItem bookInfoItem = (BookInfoItem) item;
 
             name.setText(bookInfoItem.name);
+            save.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                }
+            });
 
-            price.setText(bookInfoItem.price);
-            best.setText(bookInfoItem.best);
-            better.setText(bookInfoItem.better);
-            good.setText(bookInfoItem.good);
+            price.setText(bookInfoItem.price.price);
+            best.setText(bookInfoItem.price.best);
+            better.setText(bookInfoItem.price.better);
+            good.setText(bookInfoItem.price.good);
         }
     }
 }

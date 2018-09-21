@@ -130,7 +130,7 @@ public class PriceInquiry extends AsyncTask<Void, Void, List<BookInfoItem>> {
 
             String[] price = element.select(getPriceFilter()).text().split("원");
             if (price.length > 1)
-                bookInfoList.add(new BookInfoItem(isbn, getCompany(), image, name, price[0], price[1], price[2], price[3]));
+                bookInfoList.add(new BookInfoItem(isbn, getCompany(), image, name, new PriceItem(price)));
         }
 
         if (BuildConfig.DEBUG)
