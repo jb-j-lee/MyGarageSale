@@ -1,42 +1,20 @@
 package com.myjb.dev.recyclerView;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.myjb.dev.mygaragesale.R;
+import com.myjb.dev.mygaragesale.databinding.ItemRecyclerviewBookinfoBinding;
 import com.myjb.dev.network.BookInfoItem;
 
-import org.androidannotations.annotations.EViewGroup;
-import org.androidannotations.annotations.ViewById;
-
-@EViewGroup(R.layout.item_recyclerview_bookinfo)
 public class CardItemView extends ItemView {
 
-    @ViewById(R.id.image)
-    ImageView image;
-
-    @ViewById(R.id.name)
-    TextView name;
-
-    @ViewById(R.id.save)
-    ImageView save;
-
-    @ViewById(R.id.price)
-    TextView price;
-
-    @ViewById(R.id.best)
-    TextView best;
-
-    @ViewById(R.id.better)
-    TextView better;
-
-    @ViewById(R.id.good)
-    TextView good;
+    ItemRecyclerviewBookinfoBinding binding;
 
     public CardItemView(Context context) {
         super(context);
+        binding = ItemRecyclerviewBookinfoBinding.inflate(LayoutInflater.from(context));
+        addView(binding.getRoot());
     }
 
     @Override
@@ -47,17 +25,17 @@ public class CardItemView extends ItemView {
 
             BookInfoItem bookInfoItem = (BookInfoItem) item;
 
-            name.setText(bookInfoItem.name);
-            save.setOnClickListener(new OnClickListener() {
+            binding.name.setText(bookInfoItem.name);
+            binding.save.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                 }
             });
 
-            price.setText(bookInfoItem.price.price);
-            best.setText(bookInfoItem.price.best);
-            better.setText(bookInfoItem.price.better);
-            good.setText(bookInfoItem.price.good);
+            binding.price.setText(bookInfoItem.price.price);
+            binding.best.setText(bookInfoItem.price.best);
+            binding.better.setText(bookInfoItem.price.better);
+            binding.good.setText(bookInfoItem.price.good);
         }
     }
 }

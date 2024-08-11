@@ -1,7 +1,8 @@
 package com.myjb.dev.recyclerView;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 class ViewWrapper<V extends View> extends RecyclerView.ViewHolder {
     private V itemView;

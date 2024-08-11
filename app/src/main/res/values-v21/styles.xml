@@ -7,8 +7,8 @@
     </style>
 
     <style name="MyEditText" parent="BaseEditText">
-        <item name="android:colorControlActivated">@color/colorTextWhite</item>
-        <item name="android:colorControlHighlight">@android:color/holo_orange_dark</item>
-        <item name="android:colorControlNormal">@color/colorTextLightGray</item>
+        <item name="colorControlActivated">@color/colorTextWhite</item>
+        <item name="colorControlHighlight">@android:color/holo_orange_dark</item>
+        <item name="colorControlNormal">@color/colorTextLightGray</item>
     </style>
 </resources>

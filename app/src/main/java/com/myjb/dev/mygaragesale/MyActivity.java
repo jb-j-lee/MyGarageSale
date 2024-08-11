@@ -1,58 +1,41 @@
 package com.myjb.dev.mygaragesale;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ImageSpan;
-import android.view.KeyEvent;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.myjb.dev.view.ClearEditText;
+import com.myjb.dev.mygaragesale.databinding.ActivityMainBinding;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.ViewById;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
-@EActivity(R.layout.activity_main)
 public class MyActivity extends AppCompatActivity {
+    private ActivityMainBinding binding;
 
     public static final String COMPANY = "COMPANY";
     public static final String SEARCHED = "SEARCHED";
-
-    @ViewById(R.id.scan_button)
-    ImageButton scanButton;
-
-    @ViewById(R.id.editText)
-    ClearEditText editText;
-
-    @ViewById(R.id.tabLayout)
-    TabLayout tabLayout;
-
-    @ViewById(R.id.viewPager)
-    ViewPager viewPager;
 
     MyPagerAdapter pagerAdapter;
 
@@ -60,64 +43,77 @@ public class MyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getSupportActionBar() != null)
+        if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
+        }
+
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        bindViews();
     }
 
-    @AfterViews
+    @Nullable
+    @Override
+    public View onCreateView(@Nullable View parent, @NonNull String name, @NonNull Context context, @NonNull AttributeSet attrs) {
+        return super.onCreateView(parent, name, context, attrs);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull String name, @NonNull Context context, @NonNull AttributeSet attrs) {
+        return super.onCreateView(name, context, attrs);
+    }
+
     void bindViews() {
-        scanButton.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        applyColorFilter(true);
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        applyColorFilter(v.isPressed());
-                        break;
-                    case MotionEvent.ACTION_UP:
-                    case MotionEvent.ACTION_CANCEL:
-                    case MotionEvent.ACTION_OUTSIDE:
-                    default:
-                        applyColorFilter(false);
-                        break;
-                }
-                return false;
+        binding.scanButton.setOnClickListener(v -> scanBarcode());
+
+        binding.scanButton.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    applyColorFilter(true);
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    applyColorFilter(v.isPressed());
+                    break;
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_CANCEL:
+                case MotionEvent.ACTION_OUTSIDE:
+                default:
+                    applyColorFilter(false);
+                    break;
             }
+            return false;
         });
 
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    search(editText.getText().toString());
-                }
-                return false;
+        binding.editText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                search(binding.editText.getText().toString());
             }
+            return false;
         });
 
         pagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(pagerAdapter);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        binding.viewPager.setAdapter(pagerAdapter);
+        binding.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }
 
             @Override
             public void onPageSelected(int position) {
-                if (!TextUtils.isEmpty(editText.getText().toString()))
-                    search(editText.getText().toString());
+                if (!TextUtils.isEmpty(binding.editText.getText().toString()))
+                    search(binding.editText.getText().toString());
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
             }
         });
-        tabLayout.setupWithViewPager(viewPager);
+        binding.tabLayout.setupWithViewPager(binding.viewPager);
 
         if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-            ViewGroup view = (ViewGroup) tabLayout.getChildAt(0);
+            ViewGroup view = (ViewGroup) binding.tabLayout.getChildAt(0);
 
             int childCount = view.getChildCount();
             for (int i = 0; i < childCount; i++) {
@@ -127,11 +123,11 @@ public class MyActivity extends AppCompatActivity {
         }
 
         if (BuildConfig.DEBUG) {
-            editText.postDelayed(new Runnable() {
+            binding.editText.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    editText.setText("무례한 사람에게 웃으며 대처하는 법");
-                    search(editText.getText().toString());
+                    binding.editText.setText("무례한 사람에게 웃으며 대처하는 법");
+                    search(binding.editText.getText().toString());
                 }
             }, 1000);
         }
@@ -142,11 +138,10 @@ public class MyActivity extends AppCompatActivity {
             Toast.makeText(getBaseContext(), R.string.hint_edittext, Toast.LENGTH_SHORT).show();
         }
 
-        MyFragment myFragment = (MyFragment) getSupportFragmentManager().getFragments().get(viewPager.getCurrentItem());
+        MyFragment myFragment = (MyFragment) getSupportFragmentManager().getFragments().get(binding.viewPager.getCurrentItem());
         myFragment.search(text);
     }
 
-    @Click(R.id.scan_button)
     public void scanBarcode() {
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
@@ -162,7 +157,7 @@ public class MyActivity extends AppCompatActivity {
         if (result != null) {
             String text = result.getContents();
             if (!TextUtils.isEmpty(text)) {
-                editText.setText(text);
+                binding.editText.setText(text);
                 search(text);
             }
         } else {
@@ -184,7 +179,7 @@ public class MyActivity extends AppCompatActivity {
             switch (position) {
                 case 0:
                 case 1:
-                    MyFragment fragment = new MyFragment_();
+                    MyFragment fragment = new MyFragment();
                     Bundle bundle = new Bundle();
                     bundle.putInt(COMPANY, position + 1);
                     fragment.setArguments(bundle);
@@ -216,8 +211,8 @@ public class MyActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(COMPANY, tabLayout.getSelectedTabPosition() + 1);
-        outState.putString(SEARCHED, editText.getText().toString());
+        outState.putInt(COMPANY, binding.tabLayout.getSelectedTabPosition() + 1);
+        outState.putString(SEARCHED, binding.editText.getText().toString());
     }
 
     @Override
@@ -225,14 +220,14 @@ public class MyActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
         String searched = savedInstanceState.getString(SEARCHED, null);
         if (!TextUtils.isEmpty(searched))
-            editText.setText(searched);
-        viewPager.setCurrentItem(savedInstanceState.getInt(COMPANY) - 1);
+            binding.editText.setText(searched);
+        binding.viewPager.setCurrentItem(savedInstanceState.getInt(COMPANY) - 1);
     }
 
     void applyColorFilter(boolean apply) {
         if (apply)
-            scanButton.setColorFilter(ContextCompat.getColor(getBaseContext(), R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
+            binding.scanButton.setColorFilter(ContextCompat.getColor(getBaseContext(), R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
         else
-            scanButton.clearColorFilter();
+            binding.scanButton.clearColorFilter();
     }
 }

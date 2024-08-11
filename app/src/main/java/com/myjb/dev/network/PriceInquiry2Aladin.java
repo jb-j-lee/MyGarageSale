@@ -1,6 +1,6 @@
 package com.myjb.dev.network;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.myjb.dev.model.ServiceModel;
 

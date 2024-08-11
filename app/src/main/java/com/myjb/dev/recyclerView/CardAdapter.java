@@ -4,15 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.annotation.NonNull;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.myjb.dev.model.ServiceModel;
 import com.myjb.dev.network.BookInfoItem;
-
-import org.androidannotations.annotations.EBean;
-import org.androidannotations.annotations.RootContext;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,7 +18,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-@EBean
+import androidx.annotation.NonNull;
+
 public class CardAdapter extends RecyclerViewAdapterBase<String, ItemView> {
 
     final int BOOK_WIDTH = 200;
@@ -31,7 +28,6 @@ public class CardAdapter extends RecyclerViewAdapterBase<String, ItemView> {
         void onItemClick(String name, String isbn, int position);
     }
 
-    @RootContext
     Context context;
 
     @NonNull
@@ -45,7 +41,7 @@ public class CardAdapter extends RecyclerViewAdapterBase<String, ItemView> {
 
     @Override
     protected ItemView onCreateItemView(@NonNull ViewGroup parent, int viewType) {
-        return CardItemView_.build(context);
+        return new CardItemView(context);
     }
 
     @Override
@@ -61,7 +57,7 @@ public class CardAdapter extends RecyclerViewAdapterBase<String, ItemView> {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                final ImageView imageView = ((CardItemView) view).image;
+                final ImageView imageView = ((CardItemView) view).binding.image;
                 final Bitmap bitmap = getBitmap(item.image);
                 if (bitmap != null) {
                     ((Activity) context).runOnUiThread(new Runnable() {

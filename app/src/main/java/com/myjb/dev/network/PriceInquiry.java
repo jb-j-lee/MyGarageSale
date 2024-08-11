@@ -1,7 +1,7 @@
 package com.myjb.dev.network;
 
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.myjb.dev.model.ServiceModel;
@@ -41,7 +41,7 @@ public class PriceInquiry extends AsyncTask<Void, Void, List<BookInfoItem>> {
     protected List<BookInfoItem> doInBackground(Void... params) {
         String url = null;
         try {
-            url = baseUrl + URLEncoder.encode(query, "EUC-KR");
+            url = baseUrl + URLEncoder.encode(query, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

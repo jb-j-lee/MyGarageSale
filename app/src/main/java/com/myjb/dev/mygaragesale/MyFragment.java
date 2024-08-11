@@ -2,47 +2,32 @@ package com.myjb.dev.mygaragesale;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.ContentLoadingProgressBar;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.myjb.dev.model.ServiceModel;
+import com.myjb.dev.mygaragesale.databinding.FragmentMainBinding;
 import com.myjb.dev.network.BookInfoItem;
 import com.myjb.dev.network.PriceInquiry;
 import com.myjb.dev.network.PriceInquiry2Aladin;
 import com.myjb.dev.network.PriceInquiry2Yes24;
 import com.myjb.dev.recyclerView.CardAdapter;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Bean;
-import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.ViewById;
-
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 
 import static com.myjb.dev.mygaragesale.MyActivity.COMPANY;
 
-@EFragment(R.layout.fragment_main)
 public class MyFragment extends Fragment implements PriceInquiry.OnPriceListener {
 
-    @ViewById(R.id.recyclerView)
-    RecyclerView recyclerView;
+    private FragmentMainBinding binding;
 
-    @ViewById(R.id.empty)
-    ImageView empty;
-
-    @ViewById(R.id.progress)
-    ContentLoadingProgressBar progress;
-
-    @Bean
     CardAdapter recyclerAdapter;
 
     int company;
@@ -65,19 +50,26 @@ public class MyFragment extends Fragment implements PriceInquiry.OnPriceListener
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        binding = FragmentMainBinding.inflate(getLayoutInflater());
+        return binding.getRoot();
     }
 
-    @AfterViews
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        bindAdapter();
+        super.onViewCreated(view, savedInstanceState);
+    }
+
     void bindAdapter() {
-        recyclerView.setAdapter(recyclerAdapter);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerAdapter = new CardAdapter(requireContext());
+        binding.recyclerView.setAdapter(recyclerAdapter);
+        binding.recyclerView.setHasFixedSize(true);
+        binding.recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         if (company == ServiceModel.Company.ALADIN)
-            empty.setImageResource(R.drawable.logo_aladin);
+            binding.empty.setImageResource(R.drawable.logo_aladin);
         else
-            empty.setImageResource(R.drawable.logo_yes24);
+            binding.empty.setImageResource(R.drawable.logo_yes24);
 
         setEmptyViewVisibility(true);
     }
@@ -124,13 +116,13 @@ public class MyFragment extends Fragment implements PriceInquiry.OnPriceListener
     }
 
     void setEmptyViewVisibility(boolean visible) {
-        empty.setVisibility(visible ? View.VISIBLE : View.GONE);
-        recyclerView.setVisibility(visible ? View.GONE : View.VISIBLE);
-        progress.setVisibility(View.GONE);
+        binding.empty.setVisibility(visible ? View.VISIBLE : View.GONE);
+        binding.recyclerView.setVisibility(visible ? View.GONE : View.VISIBLE);
+        binding.progress.setVisibility(View.GONE);
     }
 
     void setProgressVisibility(boolean visible) {
-        progress.setVisibility(visible ? View.VISIBLE : View.GONE);
+        binding.progress.setVisibility(visible ? View.VISIBLE : View.GONE);
 //        progress.getRootView().setBackgroundDrawable(visible ? new ColorDrawable(0x7f000000) : getResources().getDrawable(R.color.colorTextWhite));
     }
 }

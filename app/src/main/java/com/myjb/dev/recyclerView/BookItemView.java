@@ -1,27 +1,24 @@
 package com.myjb.dev.recyclerView;
 
 import android.content.Context;
-import android.widget.TextView;
+import android.view.LayoutInflater;
 
-import com.myjb.dev.mygaragesale.R;
+import com.myjb.dev.mygaragesale.databinding.ItemRecyclerviewBookBinding;
 
-import org.androidannotations.annotations.EViewGroup;
-import org.androidannotations.annotations.ViewById;
-
-@EViewGroup(R.layout.item_recyclerview_book)
 public class BookItemView extends ItemView {
 
-    @ViewById(R.id.book)
-    TextView book;
+    ItemRecyclerviewBookBinding binding;
 
     public BookItemView(Context context) {
         super(context);
+        binding = ItemRecyclerviewBookBinding.inflate(LayoutInflater.from(context));
+        addView(binding.getRoot());
     }
 
     @Override
     public void bind(Object item) {
         if (item instanceof String) {
-            book.setText((String) item);
+            binding.book.setText((String) item);
         }
     }
 }

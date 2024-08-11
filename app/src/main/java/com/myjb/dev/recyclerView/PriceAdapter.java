@@ -1,7 +1,6 @@
 package com.myjb.dev.recyclerView;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,15 +8,11 @@ import android.view.ViewGroup;
 import com.myjb.dev.mygaragesale.R;
 import com.myjb.dev.network.PriceItem;
 
-import org.androidannotations.annotations.AfterInject;
-import org.androidannotations.annotations.EBean;
-import org.androidannotations.annotations.RootContext;
-import org.androidannotations.annotations.res.StringArrayRes;
-
 import java.util.ArrayList;
 import java.util.List;
 
-@EBean
+import androidx.annotation.NonNull;
+
 public class PriceAdapter extends RecyclerViewAdapterBase<String, ItemView> {
 
     interface OnItemClickListener {
@@ -28,13 +23,10 @@ public class PriceAdapter extends RecyclerViewAdapterBase<String, ItemView> {
         BOOK, PRICE
     }
 
-    @RootContext
     Context context;
 
-    @StringArrayRes(R.array.book_name)
     String[] names;
 
-    @StringArrayRes(R.array.book_isbn)
     String[] isbn;
 
     @NonNull
@@ -46,8 +38,10 @@ public class PriceAdapter extends RecyclerViewAdapterBase<String, ItemView> {
         this.context = context;
     }
 
-    @AfterInject
     void bind() {
+        names = context.getResources().getStringArray(R.array.book_name);
+        isbn = context.getResources().getStringArray(R.array.book_isbn);
+
         itemList = new ArrayList<>(names.length * 2);
 
         //TODO
@@ -61,9 +55,9 @@ public class PriceAdapter extends RecyclerViewAdapterBase<String, ItemView> {
     @Override
     protected ItemView onCreateItemView(@NonNull ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE.BOOK.ordinal())
-            return BookItemView_.build(context);
+            return new BookItemView(context);
         else
-            return PriceItemView_.build(context);
+            return new PriceItemView(context);
     }
 
     @Override

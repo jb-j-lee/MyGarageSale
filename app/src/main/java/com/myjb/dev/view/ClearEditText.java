@@ -2,16 +2,17 @@ package com.myjb.dev.view;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.design.widget.TextInputEditText;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.myjb.dev.mygaragesale.R;
+
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 
 public class ClearEditText extends TextInputEditText implements TextWatcher, View.OnTouchListener, View.OnFocusChangeListener {
 
@@ -27,7 +28,7 @@ public class ClearEditText extends TextInputEditText implements TextWatcher, Vie
     }
 
     public ClearEditText(Context context, AttributeSet attrs) {
-        this(context, attrs, android.support.v7.appcompat.R.attr.editTextStyle);
+        this(context, attrs, android.R.attr.editTextStyle);
     }
 
     public ClearEditText(Context context, AttributeSet attrs, int defStyleAttr) {
