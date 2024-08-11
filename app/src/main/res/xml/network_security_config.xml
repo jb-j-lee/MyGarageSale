@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+
     <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">www.aladin.co.kr</domain>
-        <domain includeSubdomains="true">www.yes24.com</domain>
-        <domain includeSubdomains="true">image.aladin.co.kr</domain>
-        <domain includeSubdomains="true">image.yes24.com</domain>
+        <domain includeSubdomains="true">aladin.co.kr</domain>
+        <domain includeSubdomains="true">yes24.com</domain>
     </domain-config>
 </network-security-config>

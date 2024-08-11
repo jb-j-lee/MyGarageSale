@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">MyGarageSale</string>
+    <string name="app_name">Selling Used Books</string>
 
     <string name="yes24_button" tools:ignore="MissingTranslation">"YES24"</string>
     <string name="aladin_button" tools:ignore="MissingTranslation">"ALADIN"</string>
