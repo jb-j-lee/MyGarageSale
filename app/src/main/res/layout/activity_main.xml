@@ -40,9 +40,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_edittext"
-                    android:textColorHint="@color/colorTextLightGray">
+                    android:textColorHint="@color/colorTextLightGray"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="@color/colorTextLightGray">
 
-                    <com.myjb.dev.view.ClearEditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editText"
                         style="@style/MyEditText" />
                 </com.google.android.material.textfield.TextInputLayout>
