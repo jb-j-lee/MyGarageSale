@@ -1,16 +1,20 @@
-package com.myjb.dev.network
+package com.myjb.dev.model.remote.jsoup
 
-import com.myjb.dev.model.ServiceModel
+import com.myjb.dev.model.data.Company
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 
-class PriceInquiry2Yes24(query: String, listener: OnPriceListener) : PriceInquiry(query, listener) {
+internal class PriceInquiry2Yes24(query: String, listener: OnPriceListener) :
+    PriceInquiry(query, listener) {
+
+    override val TAG = "PriceInquiry2Yes24"
+
     init {
         baseUrl = "http://www.yes24.com/Mall/buyback/Search?CategoryNumber=018&SearchWord="
     }
 
-    override fun getElements(doc: Document?): Elements {
+    override fun getElements(doc: Document): Elements {
         val elements = super.getElements(doc)
 
         val element = elements.first() ?: return Elements()
@@ -20,8 +24,8 @@ class PriceInquiry2Yes24(query: String, listener: OnPriceListener) : PriceInquir
         return children
     }
 
-    override val company: Int
-        get() = ServiceModel.Company.YES24
+    override val company: Company
+        get() = Company.YES24
 
     override val basicFilter: String
         get() = "ul[class=clearfix]"
@@ -36,8 +40,4 @@ class PriceInquiry2Yes24(query: String, listener: OnPriceListener) : PriceInquir
 
     override val priceFilter: String
         get() = "td"
-
-    companion object {
-        protected const val TAG: String = "PriceInquiry2Yes24"
-    }
 }

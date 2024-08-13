@@ -1,4 +1,4 @@
-package com.myjb.dev.recyclerView
+package com.myjb.dev.view.recyclerView
 
 import androidx.recyclerview.widget.RecyclerView
 import com.myjb.dev.mygaragesale.databinding.ItemRecyclerviewBookBinding

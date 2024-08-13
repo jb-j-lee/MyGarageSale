@@ -1,9 +1,10 @@
-package com.myjb.dev.network
+package com.myjb.dev.model.remote.jsoup
 
 import android.os.AsyncTask
-import android.util.Log
-import com.myjb.dev.model.ServiceModel
-import com.myjb.dev.mygaragesale.BuildConfig
+import com.myjb.dev.model.data.Company
+import com.myjb.dev.model.remote.dto.BookInfoItem
+import com.myjb.dev.model.remote.dto.PriceItem
+import com.myjb.dev.util.Logger
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
@@ -14,33 +15,35 @@ import java.net.MalformedURLException
 import java.net.URLEncoder
 import java.net.UnknownHostException
 
-open class PriceInquiry(private val query: String, listener: OnPriceListener) :
+open class PriceInquiry(private val query: String, private val listener: OnPriceListener) :
     AsyncTask<Void?, Void?, List<BookInfoItem>?>() {
+
+    protected open val TAG = "PriceInquiry"
+
     interface OnPriceListener {
         fun onPriceResult(priceList: List<BookInfoItem>?)
     }
 
     protected var baseUrl: String? = null
-    private val listener: OnPriceListener? = listener
 
-    protected override fun doInBackground(vararg params: Void?): List<BookInfoItem>? {
-        var url: String? = null
-        try {
-            url = baseUrl + URLEncoder.encode(query, "UTF-8")
+    override fun doInBackground(vararg params: Void?): List<BookInfoItem>? {
+        val url: String = try {
+            baseUrl + URLEncoder.encode(query, "UTF-8")
         } catch (e: UnsupportedEncodingException) {
             e.printStackTrace()
+            ""
         }
 
-        if (BuildConfig.DEBUG) Log.e(TAG, "[basicVersion] url : $url")
+        Logger.e(TAG, "[basicVersion] url : $url")
 
         return getPriceInfo(url)
     }
 
     override fun onPostExecute(imageUrls: List<BookInfoItem>?) {
-        listener?.onPriceResult(imageUrls)
+        listener.onPriceResult(imageUrls)
     }
 
-    protected fun getPriceInfo(url: String?): List<BookInfoItem>? {
+    protected fun getPriceInfo(url: String): List<BookInfoItem>? {
         var doc: Document? = null
         var elements: Elements? = Elements()
 
@@ -56,10 +59,9 @@ open class PriceInquiry(private val query: String, listener: OnPriceListener) :
             val select = System.currentTimeMillis()
 
             val bookInfoList = getItems(elements)
-
-            if (BuildConfig.DEBUG) Log.e(
+            Logger.e(
                 TAG,
-                "[basicVersion] connect : " + (connect - init) + ", select : " + (select - connect) + ", add : " + (System.currentTimeMillis() - select)
+                "[basicVersion] connect : ${(connect - init)}, select : ${(select - connect)}, add : ${(System.currentTimeMillis() - select)}"
             )
 
             return bookInfoList
@@ -78,38 +80,28 @@ open class PriceInquiry(private val query: String, listener: OnPriceListener) :
     }
 
     @Throws(IOException::class)
-    private fun getDocument(url: String?): Document {
+    private fun getDocument(url: String): Document {
         return Jsoup.connect(url).get()
     }
 
-    protected open fun getElements(doc: Document?): Elements {
+    protected open fun getElements(doc: Document): Elements {
         val filter = basicFilter
+        Logger.e(TAG, "[basicVersion] filter : $filter")
 
-        if (BuildConfig.DEBUG) Log.e(TAG, "[basicVersion] filter : $filter")
-
-        return doc!!.select(filter)
+        return doc.select(filter)
     }
 
     private fun getItems(elements: Elements): List<BookInfoItem> {
         val bookInfoList: MutableList<BookInfoItem> = ArrayList()
         for (element in elements) {
             val isbn = getISBN(element)
-
-            if (BuildConfig.DEBUG) Log.e(TAG, "[basicVersion] isbn : $isbn")
+            Logger.e(TAG, "[basicVersion] isbn : $isbn")
 
             val image = element.select(imageFilter).attr("src")
-
-            if (BuildConfig.DEBUG) Log.e(
-                TAG,
-                "[basicVersion] getImageFilter() : " + imageFilter + ", image : " + image
-            )
+            Logger.e(TAG, "[basicVersion] imageFilter : $imageFilter, image : $image")
 
             val name = element.select(nameFilter).text()
-
-            if (BuildConfig.DEBUG) Log.e(
-                TAG,
-                "[basicVersion] getNameFilter() : " + nameFilter + ", name : " + name
-            )
+            Logger.e(TAG, "[basicVersion] nameFilter : $nameFilter, name : $name")
 
             val price = element.select(priceFilter).text().split("원".toRegex())
                 .dropLastWhile { it.isEmpty() }
@@ -125,13 +117,13 @@ open class PriceInquiry(private val query: String, listener: OnPriceListener) :
             )
         }
 
-        if (BuildConfig.DEBUG) Log.e(TAG, "[basicVersion] list.size : " + bookInfoList.size)
+        Logger.e(TAG, "[basicVersion] list.size : " + bookInfoList.size)
 
         return bookInfoList
     }
 
-    protected open val company: Int
-        get() = ServiceModel.Company.NONE
+    protected open val company: Company
+        get() = Company.NONE
 
     protected open val basicFilter: String
         get() = ""
@@ -140,7 +132,7 @@ open class PriceInquiry(private val query: String, listener: OnPriceListener) :
         return ""
     }
 
-    protected val imageFilter: String
+    private val imageFilter: String
         get() = "img[abs:src]"
 
     protected open val nameFilter: String
@@ -148,8 +140,4 @@ open class PriceInquiry(private val query: String, listener: OnPriceListener) :
 
     protected open val priceFilter: String
         get() = ""
-
-    companion object {
-        protected const val TAG: String = "PriceInquiry"
-    }
 }

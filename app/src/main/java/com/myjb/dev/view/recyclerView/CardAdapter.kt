@@ -1,4 +1,4 @@
-package com.myjb.dev.recyclerView
+package com.myjb.dev.view.recyclerView
 
 import android.app.Activity
 import android.content.Context
@@ -7,9 +7,9 @@ import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.myjb.dev.model.ServiceModel
+import com.myjb.dev.model.data.Company
 import com.myjb.dev.mygaragesale.databinding.ItemRecyclerviewBookinfoBinding
-import com.myjb.dev.network.BookInfoItem
+import com.myjb.dev.model.remote.dto.BookInfoItem
 import java.io.IOException
 import java.io.InputStream
 import java.net.HttpURLConnection
@@ -36,7 +36,7 @@ class CardAdapter(var context: Context) : RecyclerView.Adapter<CardItemView>() {
     override fun onBindViewHolder(viewHolder: CardItemView, position: Int) {
         val item = itemList[position]
 
-        if (item.company == ServiceModel.Company.NONE) {
+        if (item.company == Company.NONE) {
             return
         }
 
@@ -61,7 +61,7 @@ class CardAdapter(var context: Context) : RecyclerView.Adapter<CardItemView>() {
     override fun getItemViewType(position: Int): Int {
         if (itemList.isEmpty()) return 1
 
-        return itemList[position].company
+        return itemList[position].company.ordinal
     }
 
     override fun getItemCount(): Int {

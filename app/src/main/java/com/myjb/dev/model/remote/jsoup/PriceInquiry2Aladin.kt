@@ -1,18 +1,21 @@
-package com.myjb.dev.network
+package com.myjb.dev.model.remote.jsoup
 
-import com.myjb.dev.model.ServiceModel
+import com.myjb.dev.model.data.Company
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 
-class PriceInquiry2Aladin(query: String, listener: OnPriceListener) :
+internal class PriceInquiry2Aladin(query: String, listener: OnPriceListener) :
     PriceInquiry(query, listener) {
+
+    override val TAG = "PriceInquiry2Aladin"
+
     init {
         baseUrl =
             "http://www.aladin.co.kr/shop/usedshop/wc2b_search.aspx?ActionType=1&SearchTarget=Book&KeyWord="
     }
 
-    override fun getElements(doc: Document?): Elements {
+    override fun getElements(doc: Document): Elements {
         val elements = super.getElements(doc)
 
         val element = elements.first() ?: return Elements()
@@ -32,8 +35,8 @@ class PriceInquiry2Aladin(query: String, listener: OnPriceListener) :
         return newElements
     }
 
-    override val company: Int
-        get() = ServiceModel.Company.ALADIN
+    override val company: Company
+        get() = Company.ALADIN
 
     override val basicFilter: String
         get() = "table[id=searchResult]"
@@ -47,8 +50,4 @@ class PriceInquiry2Aladin(query: String, listener: OnPriceListener) :
 
     override val priceFilter: String
         get() = "td[class=c2b_tablet3]"
-
-    companion object {
-        protected const val TAG: String = "PriceInquiry2Aladin"
-    }
 }

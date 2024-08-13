@@ -1,8 +1,9 @@
-package com.myjb.dev.recyclerView
+package com.myjb.dev.view.recyclerView
 
 import androidx.recyclerview.widget.RecyclerView
 import com.myjb.dev.mygaragesale.databinding.ItemRecyclerviewBookinfoBinding
-import com.myjb.dev.network.BookInfoItem
+import com.myjb.dev.model.remote.dto.BookInfoItem
+import com.myjb.dev.util.setOnSingleClickListener
 
 class CardItemView(private val view: ItemRecyclerviewBookinfoBinding) :
     RecyclerView.ViewHolder(view.root) {
@@ -14,7 +15,7 @@ class CardItemView(private val view: ItemRecyclerviewBookinfoBinding) :
 
         view.name.text = item.name
         //TODO
-        view.save.setOnClickListener { }
+        view.save.setOnSingleClickListener { }
 
         view.price.text = item.price.price
         view.best.text = item.price.best

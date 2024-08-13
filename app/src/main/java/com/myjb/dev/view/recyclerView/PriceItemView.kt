@@ -1,8 +1,8 @@
-package com.myjb.dev.recyclerView
+package com.myjb.dev.view.recyclerView
 
 import androidx.recyclerview.widget.RecyclerView
 import com.myjb.dev.mygaragesale.databinding.ItemRecyclerviewPriceBinding
-import com.myjb.dev.network.PriceItem
+import com.myjb.dev.model.remote.dto.PriceItem
 
 class PriceItemView(private val view: ItemRecyclerviewPriceBinding) :
     RecyclerView.ViewHolder(view.root) {

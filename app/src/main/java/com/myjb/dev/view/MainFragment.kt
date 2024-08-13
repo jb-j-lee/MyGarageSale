@@ -1,4 +1,4 @@
-package com.myjb.dev.mygaragesale
+package com.myjb.dev.view
 
 import android.os.AsyncTask
 import android.os.Bundle
@@ -8,31 +8,35 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
-import com.myjb.dev.model.ServiceModel
+import com.myjb.dev.model.data.Company
+import com.myjb.dev.model.data.Value
+import com.myjb.dev.model.remote.dto.BookInfoItem
+import com.myjb.dev.model.remote.jsoup.PriceInquiry
+import com.myjb.dev.model.remote.jsoup.PriceInquiry.OnPriceListener
+import com.myjb.dev.model.remote.jsoup.PriceInquiry2Aladin
+import com.myjb.dev.model.remote.jsoup.PriceInquiry2Yes24
+import com.myjb.dev.mygaragesale.R
 import com.myjb.dev.mygaragesale.databinding.FragmentMainBinding
-import com.myjb.dev.network.BookInfoItem
-import com.myjb.dev.network.PriceInquiry
-import com.myjb.dev.network.PriceInquiry.OnPriceListener
-import com.myjb.dev.network.PriceInquiry2Aladin
-import com.myjb.dev.network.PriceInquiry2Yes24
-import com.myjb.dev.recyclerView.CardAdapter
+import com.myjb.dev.view.recyclerView.CardAdapter
 
-class MyFragment : Fragment(), OnPriceListener {
-    private var binding: FragmentMainBinding? = null
+class MainFragment : Fragment(), OnPriceListener {
+    private val binding: FragmentMainBinding by lazy {
+        FragmentMainBinding.inflate(layoutInflater)
+    }
 
-    var recyclerAdapter: CardAdapter? = null
+    private val recyclerAdapter: CardAdapter by lazy {
+        CardAdapter(requireContext())
+    }
 
-    var company: Int = 0
+    var company: Company = Company.NONE
     var searchText: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        company = ServiceModel.Company.NONE
-
         val bundle = arguments
         if (bundle != null) {
-            company = bundle.getInt(MyActivity.Companion.COMPANY, ServiceModel.Company.NONE)
+            company = bundle.getSerializable(Value.COMPANY.name) as Company
         }
 
         searchText = null
@@ -41,10 +45,9 @@ class MyFragment : Fragment(), OnPriceListener {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentMainBinding.inflate(layoutInflater)
-        return binding!!.root
+        savedInstanceState: Bundle?,
+    ): View {
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,19 +55,21 @@ class MyFragment : Fragment(), OnPriceListener {
         super.onViewCreated(view, savedInstanceState)
     }
 
-    fun bindAdapter() {
-        recyclerAdapter = CardAdapter(requireContext())
-        binding!!.recyclerView.adapter = recyclerAdapter
-        binding!!.recyclerView.setHasFixedSize(true)
-        binding!!.recyclerView.itemAnimator = DefaultItemAnimator()
+    private fun bindAdapter() {
+        binding.recyclerView.adapter = recyclerAdapter
+        binding.recyclerView.setHasFixedSize(true)
+        binding.recyclerView.itemAnimator = DefaultItemAnimator()
 
-        if (company == ServiceModel.Company.ALADIN) binding!!.empty.setImageResource(R.drawable.logo_aladin)
-        else binding!!.empty.setImageResource(R.drawable.logo_yes24)
+        if (company == Company.ALADIN) {
+            binding.empty.setImageResource(R.drawable.logo_aladin)
+        } else {
+            binding.empty.setImageResource(R.drawable.logo_yes24)
+        }
 
         setEmptyViewVisibility(true)
     }
 
-    fun isSearched(text: String): Boolean {
+    private fun isSearched(text: String): Boolean {
         //TODO Handling Error
         return text.equals(searchText, ignoreCase = true)
     }
@@ -74,16 +79,18 @@ class MyFragment : Fragment(), OnPriceListener {
             onPriceResult(null)
         } else {
             //TODO Handling Error
-            if (isSearched(text)) return
+            if (isSearched(text)) {
+                return
+            }
 
             searchText = text
 
             setProgressVisibility(true)
 
             var priceInquiry: PriceInquiry? = null
-            if (company == ServiceModel.Company.ALADIN) {
+            if (company == Company.ALADIN) {
                 priceInquiry = PriceInquiry2Aladin(text, this)
-            } else if (company == ServiceModel.Company.YES24) {
+            } else if (company == Company.YES24) {
                 priceInquiry = PriceInquiry2Yes24(text, this)
             }
             priceInquiry?.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR)
@@ -95,22 +102,22 @@ class MyFragment : Fragment(), OnPriceListener {
 
         if (priceList == null || priceList.isEmpty()) {
             setEmptyViewVisibility(true)
-            recyclerAdapter!!.clearView()
+            recyclerAdapter.clearView()
         } else {
             setEmptyViewVisibility(false)
-            recyclerAdapter!!.updateView(priceList)
+            recyclerAdapter.updateView(priceList)
         }
     }
 
     fun setEmptyViewVisibility(visible: Boolean) {
-        binding!!.empty.visibility = if (visible) View.VISIBLE else View.GONE
-        binding!!.recyclerView.visibility =
+        binding.empty.visibility = if (visible) View.VISIBLE else View.GONE
+        binding.recyclerView.visibility =
             if (visible) View.GONE else View.VISIBLE
-        binding!!.progress.visibility = View.GONE
+        binding.progress.visibility = View.GONE
     }
 
     fun setProgressVisibility(visible: Boolean) {
-        binding!!.progress.visibility =
+        binding.progress.visibility =
             if (visible) View.VISIBLE else View.GONE
         //        progress.getRootView().setBackgroundDrawable(visible ? new ColorDrawable(0x7f000000) : getResources().getDrawable(R.color.colorTextWhite));
     }

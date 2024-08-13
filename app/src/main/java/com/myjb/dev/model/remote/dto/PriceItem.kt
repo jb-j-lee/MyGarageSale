@@ -1,10 +1,10 @@
-package com.myjb.dev.network
+package com.myjb.dev.model.remote.dto
 
 data class PriceItem(
-    var price: String,
-    var best: String,
-    var better: String,
-    var good: String,
+    val price: String,
+    val best: String,
+    val better: String,
+    val good: String,
 ) {
     constructor(price: Array<String>) : this(
         price = price[0],

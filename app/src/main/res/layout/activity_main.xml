@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MyActivity">
+    tools:context="com.myjb.dev.view.MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -37,16 +37,20 @@
                     app:srcCompat="@drawable/barcode" />
 
                 <com.google.android.material.textfield.TextInputLayout
+                    style="@style/MyTextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_edittext"
                     android:textColorHint="@color/colorTextLightGray"
+                    android:theme="@style/Theme.MaterialComponents.NoActionBar"
                     app:endIconMode="clear_text"
-                    app:endIconTint="@color/colorTextLightGray">
+                    app:endIconTint="@color/colorTextLightGray"
+                    app:hintAnimationEnabled="true"
+                    app:hintEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editText"
-                        style="@style/MyEditText" />
+                        style="@style/MyTextInputEditText" />
                 </com.google.android.material.textfield.TextInputLayout>
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.CollapsingToolbarLayout>

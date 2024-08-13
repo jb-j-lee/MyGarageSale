@@ -1,22 +1,20 @@
-package com.myjb.dev.recyclerView
+package com.myjb.dev.view.recyclerView
 
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.myjb.dev.model.data.ViewType
 import com.myjb.dev.mygaragesale.R
 import com.myjb.dev.mygaragesale.databinding.ItemRecyclerviewBookBinding
 import com.myjb.dev.mygaragesale.databinding.ItemRecyclerviewPriceBinding
-import com.myjb.dev.network.PriceItem
+import com.myjb.dev.model.remote.dto.PriceItem
+import com.myjb.dev.util.Logger
 
 class PriceAdapter(var context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     interface OnItemClickListener {
         fun onItemClick(name: String?, isbn: String?, position: Int)
-    }
-
-    internal enum class VIEW_TYPE {
-        BOOK, PRICE
     }
 
     val names: Array<String> by lazy {
@@ -43,7 +41,7 @@ class PriceAdapter(var context: Context) : RecyclerView.Adapter<RecyclerView.Vie
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return if (viewType == VIEW_TYPE.BOOK.ordinal) {
+        return if (viewType == ViewType.BOOK.ordinal) {
             val binding =
                 ItemRecyclerviewBookBinding.inflate(LayoutInflater.from(context), parent, false)
             BookItemView(binding)
@@ -55,7 +53,7 @@ class PriceAdapter(var context: Context) : RecyclerView.Adapter<RecyclerView.Vie
     }
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
-        Log.e("", "[onBindViewHolder] position : " + position + ", nameList : " + itemList.size)
+        Logger.e("TAG", "[onBindViewHolder] position : " + position + ", nameList : " + itemList.size)
 
         if (position % 3 == 0) {
             val offset = if ((position > 0)) position / 3 else 0
@@ -78,8 +76,8 @@ class PriceAdapter(var context: Context) : RecyclerView.Adapter<RecyclerView.Vie
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (position % 3 == 0) return VIEW_TYPE.BOOK.ordinal
-        return VIEW_TYPE.PRICE.ordinal
+        if (position % 3 == 0) return ViewType.BOOK.ordinal
+        return ViewType.PRICE.ordinal
     }
 
     override fun getItemCount(): Int {
