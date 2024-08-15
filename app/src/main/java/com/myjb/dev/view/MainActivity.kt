@@ -29,8 +29,10 @@ import com.myjb.dev.util.setOnSingleClickListener
 private const val TAG = "MainActivity"
 
 internal class MainActivity : AppCompatActivity() {
-    private val binding: ActivityMainBinding by lazy {
-        ActivityMainBinding.inflate(layoutInflater)
+    private val binding by lazy {
+        ActivityMainBinding.inflate(layoutInflater).apply {
+            lifecycleOwner = this@MainActivity
+        }
     }
 
     private val pagerAdapter: MyPagerAdapter by lazy {

@@ -1,35 +1,40 @@
 package com.myjb.dev.view
 
-import android.os.AsyncTask
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
+import com.myjb.dev.model.Repository
 import com.myjb.dev.model.data.Company
 import com.myjb.dev.model.data.Value
-import com.myjb.dev.model.remote.dto.BookInfoItem
-import com.myjb.dev.model.remote.jsoup.PriceInquiry
-import com.myjb.dev.model.remote.jsoup.PriceInquiry.OnPriceListener
-import com.myjb.dev.model.remote.jsoup.PriceInquiry2Aladin
-import com.myjb.dev.model.remote.jsoup.PriceInquiry2Yes24
-import com.myjb.dev.mygaragesale.R
+import com.myjb.dev.model.remote.datasource.RemoteDataSource
 import com.myjb.dev.mygaragesale.databinding.FragmentMainBinding
-import com.myjb.dev.view.recyclerView.CardAdapter
+import com.myjb.dev.view.recyclerView.BookInfoAdapter
+import com.myjb.dev.viewmodel.MainViewModel
 
-class MainFragment : Fragment(), OnPriceListener {
-    private val binding: FragmentMainBinding by lazy {
-        FragmentMainBinding.inflate(layoutInflater)
+class MainFragment : Fragment() {
+    private val binding by lazy {
+        FragmentMainBinding.inflate(layoutInflater).apply {
+            model = viewModel
+            lifecycleOwner = viewLifecycleOwner
+        }
     }
 
-    private val recyclerAdapter: CardAdapter by lazy {
-        CardAdapter(requireContext())
+    private val viewModel: MainViewModel by lazy {
+        MainViewModel(
+            company = company,
+            repository = Repository(dataSource = RemoteDataSource(company = company))
+        )
     }
 
-    var company: Company = Company.NONE
-    var searchText: String? = null
+    private val adapter: BookInfoAdapter by lazy {
+        BookInfoAdapter(requireContext())
+    }
+
+    private var company: Company = Company.NONE
+    private var searchText: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,22 +56,16 @@ class MainFragment : Fragment(), OnPriceListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        bindAdapter()
         super.onViewCreated(view, savedInstanceState)
-    }
 
-    private fun bindAdapter() {
-        binding.recyclerView.adapter = recyclerAdapter
-        binding.recyclerView.setHasFixedSize(true)
-        binding.recyclerView.itemAnimator = DefaultItemAnimator()
-
-        if (company == Company.ALADIN) {
-            binding.empty.setImageResource(R.drawable.logo_aladin)
-        } else {
-            binding.empty.setImageResource(R.drawable.logo_yes24)
+        with(binding) {
+            recyclerView.adapter = adapter
+            recyclerView.itemAnimator = DefaultItemAnimator()
         }
 
-        setEmptyViewVisibility(true)
+        viewModel.list.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
     }
 
     private fun isSearched(text: String): Boolean {
@@ -75,8 +74,8 @@ class MainFragment : Fragment(), OnPriceListener {
     }
 
     fun search(text: String) {
-        if (TextUtils.isEmpty(text)) {
-            onPriceResult(null)
+        if (text.isEmpty()) {
+            adapter.submitList(mutableListOf())
         } else {
             //TODO Handling Error
             if (isSearched(text)) {
@@ -85,40 +84,7 @@ class MainFragment : Fragment(), OnPriceListener {
 
             searchText = text
 
-            setProgressVisibility(true)
-
-            var priceInquiry: PriceInquiry? = null
-            if (company == Company.ALADIN) {
-                priceInquiry = PriceInquiry2Aladin(text, this)
-            } else if (company == Company.YES24) {
-                priceInquiry = PriceInquiry2Yes24(text, this)
-            }
-            priceInquiry?.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR)
+            viewModel.getBooks(text)
         }
-    }
-
-    override fun onPriceResult(priceList: List<BookInfoItem>?) {
-        setProgressVisibility(false)
-
-        if (priceList == null || priceList.isEmpty()) {
-            setEmptyViewVisibility(true)
-            recyclerAdapter.clearView()
-        } else {
-            setEmptyViewVisibility(false)
-            recyclerAdapter.updateView(priceList)
-        }
-    }
-
-    fun setEmptyViewVisibility(visible: Boolean) {
-        binding.empty.visibility = if (visible) View.VISIBLE else View.GONE
-        binding.recyclerView.visibility =
-            if (visible) View.GONE else View.VISIBLE
-        binding.progress.visibility = View.GONE
-    }
-
-    fun setProgressVisibility(visible: Boolean) {
-        binding.progress.visibility =
-            if (visible) View.VISIBLE else View.GONE
-        //        progress.getRootView().setBackgroundDrawable(visible ? new ColorDrawable(0x7f000000) : getResources().getDrawable(R.color.colorTextWhite));
     }
 }

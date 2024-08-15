@@ -6,40 +6,28 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.myjb.dev.model.data.Company
-import com.myjb.dev.mygaragesale.databinding.ItemRecyclerviewBookinfoBinding
 import com.myjb.dev.model.remote.dto.BookInfoItem
+import com.myjb.dev.mygaragesale.databinding.ItemBookinfoBinding
 import java.io.IOException
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
 
-class CardAdapter(var context: Context) : RecyclerView.Adapter<CardItemView>() {
+class BookInfoAdapter(var context: Context) :
+    ListAdapter<BookInfoItem, BookInfoViewHolder>(DiffUtilCallback) {
     val BOOK_WIDTH: Int = 200
 
-    interface OnItemClickListener {
-        fun onItemClick(name: String?, isbn: String?, position: Int)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookInfoViewHolder {
+        val binding = ItemBookinfoBinding.inflate(LayoutInflater.from(context), parent, false)
+        return BookInfoViewHolder(binding)
     }
 
-    var itemList: MutableList<BookInfoItem> = ArrayList()
-
-    var mOnItemClickListener: OnItemClickListener? = null
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardItemView {
-        val binding =
-            ItemRecyclerviewBookinfoBinding.inflate(LayoutInflater.from(context), parent, false)
-        return CardItemView(binding)
-    }
-
-    override fun onBindViewHolder(viewHolder: CardItemView, position: Int) {
-        val item = itemList[position]
-
-        if (item.company == Company.NONE) {
-            return
-        }
-
+    override fun onBindViewHolder(viewHolder: BookInfoViewHolder, position: Int) {
+        val item = getItem(position)
         viewHolder.bind(item)
 
         Thread {
@@ -56,30 +44,6 @@ class CardAdapter(var context: Context) : RecyclerView.Adapter<CardItemView>() {
                 }
             }
         }.start()
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        if (itemList.isEmpty()) return 1
-
-        return itemList[position].company.ordinal
-    }
-
-    override fun getItemCount(): Int {
-        return itemList.size
-    }
-
-    fun setOnItemClickListener(listener: OnItemClickListener?) {
-        mOnItemClickListener = listener
-    }
-
-    fun updateView(items: List<BookInfoItem>?) {
-        itemList.clear()
-        itemList.addAll(items!!)
-        notifyDataSetChanged()
-    }
-
-    fun clearView() {
-        itemList.clear()
     }
 
     //TODO Use cache control
@@ -109,5 +73,24 @@ class CardAdapter(var context: Context) : RecyclerView.Adapter<CardItemView>() {
             urlConnection?.disconnect()
         }
         return null
+    }
+
+    companion object DiffUtilCallback : DiffUtil.ItemCallback<BookInfoItem>() {
+        override fun areItemsTheSame(oldItem: BookInfoItem, newItem: BookInfoItem): Boolean {
+            return oldItem === newItem
+        }
+
+        override fun areContentsTheSame(oldItem: BookInfoItem, newItem: BookInfoItem): Boolean {
+            return oldItem == newItem
+        }
+    }
+}
+
+class BookInfoViewHolder(private val binding: ItemBookinfoBinding) :
+    RecyclerView.ViewHolder(binding.root) {
+    val image = binding.image
+
+    fun bind(item: BookInfoItem) {
+        binding.model = item
     }
 }

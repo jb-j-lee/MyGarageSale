@@ -5,14 +5,10 @@ import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 
-internal class PriceInquiry2Yes24(query: String, listener: OnPriceListener) :
-    PriceInquiry(query, listener) {
+internal class PriceInquiry2Yes24(query: String) : PriceInquiry(query) {
 
     override val TAG = "PriceInquiry2Yes24"
-
-    init {
-        baseUrl = "http://www.yes24.com/Mall/buyback/Search?CategoryNumber=018&SearchWord="
-    }
+    override val baseUrl = "http://www.yes24.com/Mall/buyback/Search?CategoryNumber=018&SearchWord="
 
     override fun getElements(doc: Document): Elements {
         val elements = super.getElements(doc)

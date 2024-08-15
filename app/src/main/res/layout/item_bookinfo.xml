@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.myjb.dev.model.data.Company" />
+
+        <import type="android.view.View" />
+
+        <import type="com.myjb.dev.model.remote.dto.PriceItem" />
+
+        <variable
+            name="model"
+            type="com.myjb.dev.model.remote.dto.BookInfoItem" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="8dp"
+        app:cardUseCompatPadding="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/name"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/loading_book"
+                tools:ignore="contentDescription" />
+
+            <TextView
+                android:id="@+id/name"
+                style="@style/MyBookTitle"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@{model.name}"
+                app:layout_constraintLeft_toRightOf="@id/image"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.5" />
+
+            <ImageView
+                android:id="@+id/save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/save"
+                app:tint="@color/colorAccent"
+                tools:ignore="contentDescription" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/image">
+
+                <TableRow
+                    android:background="@drawable/table_top_round"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/MyBookCol"
+                        android:text="@string/card_col1" />
+
+                    <TextView
+                        style="@style/MyBookCol"
+                        android:text="@string/card_col2" />
+
+                    <TextView
+                        style="@style/MyBookCol"
+                        android:text="@string/card_col3" />
+
+                    <TextView
+                        style="@style/MyBookCol"
+                        android:text="@string/card_col4" />
+                </TableRow>
+
+                <TableRow
+                    android:background="@drawable/table_bottom_round"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/price"
+                        style="@style/MyBookPrice"
+                        android:text="@{model.price.price}" />
+
+                    <TextView
+                        android:id="@+id/best"
+                        style="@style/MyBookPrice"
+                        android:text="@{model.price.best}" />
+
+                    <TextView
+                        android:id="@+id/better"
+                        style="@style/MyBookPrice"
+                        android:text="@{model.price.better}" />
+
+                    <TextView
+                        android:id="@+id/good"
+                        style="@style/MyBookPrice"
+                        android:text="@{model.price.good}" />
+                </TableRow>
+            </TableLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

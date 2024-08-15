@@ -1,6 +1,5 @@
 package com.myjb.dev.model.remote.jsoup
 
-import android.os.AsyncTask
 import com.myjb.dev.model.data.Company
 import com.myjb.dev.model.remote.dto.BookInfoItem
 import com.myjb.dev.model.remote.dto.PriceItem
@@ -15,18 +14,30 @@ import java.net.MalformedURLException
 import java.net.URLEncoder
 import java.net.UnknownHostException
 
-open class PriceInquiry(private val query: String, private val listener: OnPriceListener) :
-    AsyncTask<Void?, Void?, List<BookInfoItem>?>() {
+open class PriceInquiry(private val query: String) {
 
     protected open val TAG = "PriceInquiry"
+    protected open val baseUrl: String = ""
+    protected open val company: Company
+        get() = Company.NONE
 
-    interface OnPriceListener {
-        fun onPriceResult(priceList: List<BookInfoItem>?)
+    protected open val basicFilter: String
+        get() = ""
+
+    protected open fun getISBN(element: Element): String {
+        return ""
     }
 
-    protected var baseUrl: String? = null
+    private val imageFilter: String
+        get() = "img[abs:src]"
 
-    override fun doInBackground(vararg params: Void?): List<BookInfoItem>? {
+    protected open val nameFilter: String
+        get() = ""
+
+    protected open val priceFilter: String
+        get() = ""
+
+    fun getPriceInfo(): List<BookInfoItem> {
         val url: String = try {
             baseUrl + URLEncoder.encode(query, "UTF-8")
         } catch (e: UnsupportedEncodingException) {
@@ -36,14 +47,6 @@ open class PriceInquiry(private val query: String, private val listener: OnPrice
 
         Logger.e(TAG, "[basicVersion] url : $url")
 
-        return getPriceInfo(url)
-    }
-
-    override fun onPostExecute(imageUrls: List<BookInfoItem>?) {
-        listener.onPriceResult(imageUrls)
-    }
-
-    protected fun getPriceInfo(url: String): List<BookInfoItem>? {
         var doc: Document? = null
         var elements: Elements? = Elements()
 
@@ -76,7 +79,7 @@ open class PriceInquiry(private val query: String, private val listener: OnPrice
             if (doc != null) doc = null
         }
 
-        return null
+        return listOf()
     }
 
     @Throws(IOException::class)
@@ -106,38 +109,26 @@ open class PriceInquiry(private val query: String, private val listener: OnPrice
             val price = element.select(priceFilter).text().split("원".toRegex())
                 .dropLastWhile { it.isEmpty() }
                 .toTypedArray()
-            if (price.size > 1) bookInfoList.add(
-                BookInfoItem(
-                    isbn,
-                    company,
-                    image,
-                    name,
-                    PriceItem(price)
-                )
+            Logger.e(
+                TAG,
+                "[basicVersion] price : ${price.contentToString()}, price size : ${price.size}"
             )
+
+            if (price.size > 1) {
+                bookInfoList.add(
+                    BookInfoItem(
+                        isbn,
+                        company,
+                        image,
+                        name,
+                        PriceItem(price)
+                    )
+                )
+            }
         }
 
         Logger.e(TAG, "[basicVersion] list.size : " + bookInfoList.size)
 
         return bookInfoList
     }
-
-    protected open val company: Company
-        get() = Company.NONE
-
-    protected open val basicFilter: String
-        get() = ""
-
-    protected open fun getISBN(element: Element): String {
-        return ""
-    }
-
-    private val imageFilter: String
-        get() = "img[abs:src]"
-
-    protected open val nameFilter: String
-        get() = ""
-
-    protected open val priceFilter: String
-        get() = ""
 }
