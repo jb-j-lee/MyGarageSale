@@ -1,8 +1,6 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
     <string name="app_name">Selling Used Books</string>
-
-    <string name="yes24_button" tools:ignore="MissingTranslation">"YES24"</string>
-    <string name="aladin_button" tools:ignore="MissingTranslation">"ALADIN"</string>
 
     <string name="scan_button">"Search for ISBN using camera."</string>
     <string name="hint_edittext">"Enter the product name or ISBN."</string>

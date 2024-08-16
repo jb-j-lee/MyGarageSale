@@ -13,11 +13,17 @@
 
 # Android
 
-- minsdk 21
+- Supports Android Studio Koala
+- minsdk 24
 - targetSdk 34
-- Language : Kotlin [Kotlin](https://kotlinlang.org)
+- AGP 8.5.2
+- Gradle 8.7
 
-# JetPack
+# Language
+
+- [Kotlin](https://kotlinlang.org)
+
+# JetPack [AAC(Android Architecture Components)](https://blog.naver.com/dev2jb/223230422126)
 
 - Data Binding
 - LifeCycles
@@ -40,14 +46,13 @@
 
 # 3rd Party Libraries
 
-- Jsoup
-- Zxing
+- [Jsoup](https://github.com/jhy/jsoup)
+- [Zxing](https://github.com/zxing/zxing)
+- [Glide](https://github.com/bumptech/glide)
 
 # Build Dependency
 
-- kotlin-dsl
-
-
+- [kotlin-dsl](https://developer.android.com/build/migrate-to-kotlin-dsl)
 
 Aladin CI
 https://www.aladin.co.kr/aladdin/waladdin.aspx?pn=ci

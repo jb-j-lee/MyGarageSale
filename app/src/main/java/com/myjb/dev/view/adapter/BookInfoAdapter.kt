@@ -1,4 +1,4 @@
-package com.myjb.dev.view.recyclerView
+package com.myjb.dev.view.adapter
 
 import android.app.Activity
 import android.content.Context

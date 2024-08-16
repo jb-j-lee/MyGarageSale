@@ -11,7 +11,7 @@ import com.myjb.dev.model.data.Company
 import com.myjb.dev.model.data.Value
 import com.myjb.dev.model.remote.datasource.RemoteDataSource
 import com.myjb.dev.mygaragesale.databinding.FragmentMainBinding
-import com.myjb.dev.view.recyclerView.BookInfoAdapter
+import com.myjb.dev.view.adapter.BookInfoAdapter
 import com.myjb.dev.viewmodel.MainViewModel
 
 class MainFragment : Fragment() {

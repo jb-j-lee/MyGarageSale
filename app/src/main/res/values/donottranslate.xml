@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="yes24_button" translatable="false">"YES24"</string>
+    <string name="aladin_button" translatable="false">"ALADIN"</string>
+</resources>
