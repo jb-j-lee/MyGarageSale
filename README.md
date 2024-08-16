@@ -17,6 +17,37 @@
 - targetSdk 34
 - Language : Kotlin [Kotlin](https://kotlinlang.org)
 
+# JetPack
+
+- Data Binding
+- LifeCycles
+- LiveData
+- ViewModel
+
 # UI
+
 - SplashScreen
 - MainActivity
+
+# Architectural Patterns
+
+- MVVM
+
+# Asynchronous
+
+- Coroutine
+- Flow
+
+# 3rd Party Libraries
+
+- Jsoup
+- Zxing
+
+# Build Dependency
+
+- kotlin-dsl
+
+
+
+Aladin CI
+https://www.aladin.co.kr/aladdin/waladdin.aspx?pn=ci
