@@ -5,8 +5,9 @@ object Sdk {
 }
 
 object Versions {
-    const val KOTLIN = "1.9.22"
     const val GRADLE = "8.5.2"
+
+    const val KOTLIN = "1.9.22"
     const val COROUTINE = "1.7.3"
 
     const val DATASTORE = "1.1.1"
@@ -19,6 +20,8 @@ object Versions {
     const val MOSHI = "1.15.1"
     const val OKHTTP3 = "4.12.0"
     const val RETROFIT = "2.11.0"
+
+    const val GLIDE = "4.16.0"
 }
 
 @Suppress("unused")
@@ -113,4 +116,10 @@ object Jsoup {
 object Zxing {
     const val JOURNEYAPPS = "com.journeyapps:zxing-android-embedded:4.3.0"
     const val GOOGLE = "com.google.zxing:core:3.5.3"
+}
+
+@Suppress("unused")
+object Glide {
+    const val GLIDE = "com.github.bumptech.glide:glide:${Versions.GLIDE}"
+    const val COMPILER = "com.github.bumptech.glide:compiler:${Versions.GLIDE}"
 }

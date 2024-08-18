@@ -49,7 +49,7 @@
 
 - [Jsoup](https://github.com/jhy/jsoup)
 - [Zxing](https://github.com/zxing/zxing)
-- [Glide](https://github.com/bumptech/glide)
+- [Glide](https://github.com/bumptech/glide) - https://bumptech.github.io/glide/doc/configuration.html
 
 # Build Dependency
 
