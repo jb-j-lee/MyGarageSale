@@ -4,12 +4,14 @@ import android.view.View
 import android.widget.ImageView
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.request.RequestOptions
 import com.myjb.dev.model.remote.datasource.APIResponse
 import com.myjb.dev.model.remote.dto.BookInfoItem
 import com.myjb.dev.mygaragesale.R
+import com.myjb.dev.view.adapter.BookInfoAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -56,5 +58,12 @@ fun ImageView.setImageUrl(url: String) {
         }
     } else {
         setImageResource(R.drawable.ic_launcher_foreground)
+    }
+}
+
+@BindingAdapter("bindItem")
+fun RecyclerView.bindItem(response: APIResponse?) {
+    if (response is APIResponse.Success<*>) {
+        (adapter as BookInfoAdapter).submitList((response.data as List<BookInfoItem>))
     }
 }

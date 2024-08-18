@@ -89,15 +89,23 @@
 
                     <TextView
                         style="@style/MyBookCol"
-                        android:text="@string/card_col2" />
+                        android:text="@string/card_col2"
+                        android:visibility="@{model.price.uniform.empty ? View.VISIBLE : View.GONE}" />
 
                     <TextView
                         style="@style/MyBookCol"
-                        android:text="@string/card_col3" />
+                        android:text="@string/card_col3"
+                        android:visibility="@{model.price.uniform.empty ? View.VISIBLE : View.GONE}" />
 
                     <TextView
                         style="@style/MyBookCol"
-                        android:text="@string/card_col4" />
+                        android:text="@string/card_col4"
+                        android:visibility="@{model.price.uniform.empty ? View.VISIBLE : View.GONE}" />
+
+                    <TextView
+                        style="@style/MyBookCol"
+                        android:text="@string/card_col5"
+                        android:visibility="@{model.price.uniform.empty ? View.GONE : View.VISIBLE}" />
                 </TableRow>
 
                 <TableRow
@@ -112,17 +120,26 @@
                     <TextView
                         android:id="@+id/best"
                         style="@style/MyBookPrice"
-                        android:text="@{model.price.best}" />
+                        android:text="@{model.price.best}"
+                        android:visibility="@{model.price.uniform.empty ? View.VISIBLE : View.GONE}" />
 
                     <TextView
                         android:id="@+id/better"
                         style="@style/MyBookPrice"
-                        android:text="@{model.price.better}" />
+                        android:text="@{model.price.better}"
+                        android:visibility="@{model.price.uniform.empty ? View.VISIBLE : View.GONE}" />
 
                     <TextView
                         android:id="@+id/good"
                         style="@style/MyBookPrice"
-                        android:text="@{model.price.good}" />
+                        android:text="@{model.price.good}"
+                        android:visibility="@{model.price.uniform.empty ? View.VISIBLE : View.GONE}" />
+
+                    <TextView
+                        android:id="@+id/uniform"
+                        style="@style/MyBookPrice"
+                        android:text="@{model.price.uniform}"
+                        android:visibility="@{model.price.uniform.empty ? View.GONE : View.VISIBLE}" />
                 </TableRow>
             </TableLayout>
 

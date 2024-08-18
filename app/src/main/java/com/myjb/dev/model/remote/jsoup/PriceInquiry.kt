@@ -28,7 +28,7 @@ open class PriceInquiry(private val query: String) {
         return ""
     }
 
-    private val imageFilter: String
+    private val imageUrlFilter: String
         get() = "img[abs:src]"
 
     protected open val nameFilter: String
@@ -47,24 +47,24 @@ open class PriceInquiry(private val query: String) {
 
         Logger.e(TAG, "[basicVersion] url : $url")
 
-        var doc: Document? = null
-        var elements: Elements? = Elements()
+        val document: Document
+        val elements: Elements
 
         try {
-            val init = System.currentTimeMillis()
+            val initTime = System.currentTimeMillis()
 
-            doc = getDocument(url)
+            document = getDocument(url)
 
-            val connect = System.currentTimeMillis()
+            val connectTime = System.currentTimeMillis()
 
-            elements = getElements(doc)
+            elements = getElements(document)
 
-            val select = System.currentTimeMillis()
+            val selectTime = System.currentTimeMillis()
 
             val bookInfoList = getItems(elements)
             Logger.e(
                 TAG,
-                "[basicVersion] connect : ${(connect - init)}, select : ${(select - connect)}, add : ${(System.currentTimeMillis() - select)}"
+                "[basicVersion] connect time : ${(connectTime - initTime)}ms, select time : ${(selectTime - connectTime)}ms, add time : ${(System.currentTimeMillis() - selectTime)}ms"
             )
 
             return bookInfoList
@@ -74,9 +74,6 @@ open class PriceInquiry(private val query: String) {
             e.printStackTrace()
         } catch (e: IOException) {
             e.printStackTrace()
-        } finally {
-            if (elements != null) elements = null
-            if (doc != null) doc = null
         }
 
         return listOf()
@@ -87,11 +84,11 @@ open class PriceInquiry(private val query: String) {
         return Jsoup.connect(url).get()
     }
 
-    protected open fun getElements(doc: Document): Elements {
+    protected open fun getElements(document: Document): Elements {
         val filter = basicFilter
         Logger.e(TAG, "[basicVersion] filter : $filter")
 
-        return doc.select(filter)
+        return document.select(filter)
     }
 
     private fun getItems(elements: Elements): List<BookInfoItem> {
@@ -100,31 +97,35 @@ open class PriceInquiry(private val query: String) {
             val isbn = getISBN(element)
             Logger.e(TAG, "[basicVersion] isbn : $isbn")
 
-            val image = element.select(imageFilter).attr("src")
-            Logger.e(TAG, "[basicVersion] imageFilter : $imageFilter, image : $image")
+            val imageUrl = element.select(imageUrlFilter).attr("src")
+            Logger.e(TAG, "[basicVersion] imageUrlFilter : $imageUrlFilter, imageUrl : $imageUrl")
 
             val name = element.select(nameFilter).text()
             Logger.e(TAG, "[basicVersion] nameFilter : $nameFilter, name : $name")
 
             val price = element.select(priceFilter).text().split("원".toRegex())
-                .dropLastWhile { it.isEmpty() }
-                .toTypedArray()
+                .dropLastWhile { it.isBlank() }.toTypedArray()
             Logger.e(
-                TAG,
-                "[basicVersion] price : ${price.contentToString()}, price size : ${price.size}"
+                TAG, "[basicVersion] price : ${price.contentToString()}, price size : ${price.size}"
             )
 
-            if (price.size > 1) {
-                bookInfoList.add(
-                    BookInfoItem(
-                        isbn,
-                        company,
-                        image,
-                        name,
-                        PriceItem(price)
-                    )
+            bookInfoList.add(
+                BookInfoItem(
+                    isbn = isbn,
+                    company = company,
+                    image = imageUrl,
+                    name = name,
+                    when (price.size) {
+                        2 -> {
+                            PriceItem(price = price[0], uniform = price[1])
+                        }
+
+                        else -> {
+                            PriceItem(price = price)
+                        }
+                    }
                 )
-            }
+            )
         }
 
         Logger.e(TAG, "[basicVersion] list.size : " + bookInfoList.size)

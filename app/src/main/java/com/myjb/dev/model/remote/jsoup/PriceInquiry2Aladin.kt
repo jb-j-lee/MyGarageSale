@@ -11,8 +11,8 @@ internal class PriceInquiry2Aladin(query: String) : PriceInquiry(query) {
     override val baseUrl =
         "http://www.aladin.co.kr/shop/usedshop/wc2b_search.aspx?ActionType=1&SearchTarget=Book&KeyWord="
 
-    override fun getElements(doc: Document): Elements {
-        val elements = super.getElements(doc)
+    override fun getElements(document: Document): Elements {
+        val elements = super.getElements(document)
 
         val element = elements.first() ?: return Elements()
 

@@ -5,18 +5,21 @@ data class PriceItem(
     val best: String,
     val better: String,
     val good: String,
+    val uniform: String,
 ) {
     constructor(price: Array<String>) : this(
         price = price[0],
         best = price[1],
         better = price[2],
-        good = price[3]
+        good = price[3],
+        uniform = ""
     )
 
-    constructor(item: PriceItem) : this(
-        price = item.price,
-        best = item.best,
-        better = item.better,
-        good = item.good
+    constructor(price: String, uniform: String) : this(
+        price = price,
+        best = "",
+        better = "",
+        good = "",
+        uniform = uniform
     )
 }

@@ -7,8 +7,9 @@
 
     <string name="scan_barcode">"Scan ISBN barcode."</string>
 
-    <string name="card_col1">"price"</string>
-    <string name="card_col2">"best"</string>
-    <string name="card_col3">"better"</string>
-    <string name="card_col4">"good"</string>
+    <string name="card_col1">"Price"</string>
+    <string name="card_col2">"Best"</string>
+    <string name="card_col3">"Better"</string>
+    <string name="card_col4">"Good"</string>
+    <string name="card_col5">"Purchase price (uniform price)"</string>
 </resources>

@@ -11,4 +11,5 @@
     <string name="card_col2">"매입가 최상"</string>
     <string name="card_col3">"매입가 상"</string>
     <string name="card_col4">"매입가 중"</string>
+    <string name="card_col5">"매입가(균일가)"</string>
 </resources>

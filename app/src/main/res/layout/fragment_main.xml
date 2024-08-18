@@ -10,8 +10,6 @@
 
         <import type="com.myjb.dev.model.remote.datasource.APIResponse" />
 
-        <import type="android.view.View" />
-
         <variable
             name="model"
             type="com.myjb.dev.viewmodel.MainViewModel" />
@@ -28,7 +26,8 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:spanCount="1" />
+            app:spanCount="1"
+            custom:bindItem="@{model.result}" />
 
         <ImageView
             android:id="@+id/empty"
@@ -38,11 +37,9 @@
             android:scaleType="fitCenter"
             android:src="@{model.company == Company.YES24 ? @drawable/logo_yes24 : @drawable/logo_aladin}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.5"
             custom:imageShow="@{model.result}"
             tools:ignore="contentDescription" />
 
@@ -53,11 +50,9 @@
             android:layout_height="wrap_content"
             android:scrollbarStyle="insideInset"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.5"
             custom:progressShow="@{model.result}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

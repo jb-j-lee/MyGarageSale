@@ -6,8 +6,8 @@
   <a href="https://developer.android.com/studio/releases/gradle-plugin"><img alt="AGP" src="https://img.shields.io/badge/AGP-8.5.2-blue?style=flat"/></a>
 </p>
 
-![ISBN](/screen/ISBN.png)
-![RESULT](/screen/RESULT.png)
+<img src="/screen/ISBN.png" width="30%" height="30%" title="ISBN" alt="ISBN"/>
+<img src="/screen/RESULT.png" width="30%" height="30%" title="RESULT" alt="RESULT"/>
 
 "중고책 판매" App은 ISBN을 통한 yes24와 aladin의 중고 판매 가격을 조회하는 Android 어플리케이션입니다.
 
