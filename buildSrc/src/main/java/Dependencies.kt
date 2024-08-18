@@ -68,6 +68,7 @@ object Google {
     object Dagger {
         const val HILT = "com.google.dagger:hilt-android:${Versions.HILT}"
         const val HILT_COMPILER = "com.google.dagger:hilt-compiler:${Versions.HILT}"
+        const val HILT_NAVIGATION = "androidx.hilt:hilt-navigation-fragment:1.2.0"
     }
 }
 

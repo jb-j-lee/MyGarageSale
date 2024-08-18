@@ -39,6 +39,10 @@
 
 - ![MVVM](/screen/MVVM.png)
 
+# Dependency Injection
+
+- [Hilt](https://developer.android.com/training/dependency-injection/hilt-android)
+
 # Asynchronous
 
 - Coroutine

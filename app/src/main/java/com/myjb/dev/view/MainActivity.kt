@@ -25,9 +25,11 @@ import com.myjb.dev.mygaragesale.R
 import com.myjb.dev.mygaragesale.databinding.ActivityMainBinding
 import com.myjb.dev.util.Logger
 import com.myjb.dev.util.setOnSingleClickListener
+import dagger.hilt.android.AndroidEntryPoint
 
 private const val TAG = "MainActivity"
 
+@AndroidEntryPoint
 internal class MainActivity : AppCompatActivity() {
     private val binding by lazy {
         ActivityMainBinding.inflate(layoutInflater).apply {
