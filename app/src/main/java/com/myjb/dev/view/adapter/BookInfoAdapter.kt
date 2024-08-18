@@ -92,5 +92,6 @@ class BookInfoViewHolder(private val binding: ItemBookinfoBinding) :
 
     fun bind(item: BookInfoItem) {
         binding.model = item
+        binding.executePendingBindings()
     }
 }

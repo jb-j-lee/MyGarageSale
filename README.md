@@ -37,12 +37,13 @@
 
 # Architectural Patterns
 
-- MVVM
+- ![MVVM](/screen/MVVM.png)
 
 # Asynchronous
 
 - Coroutine
 - Flow
+- Sealed class
 
 # 3rd Party Libraries
 

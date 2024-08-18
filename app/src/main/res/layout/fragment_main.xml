@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <import type="com.myjb.dev.model.data.Company" />
+
+        <import type="com.myjb.dev.model.remote.datasource.APIResponse" />
 
         <import type="android.view.View" />
 
@@ -34,13 +37,13 @@
             android:alpha="0.5"
             android:scaleType="fitCenter"
             android:src="@{model.company == Company.YES24 ? @drawable/logo_yes24 : @drawable/logo_aladin}"
-            android:visibility="@{model.list.empty ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.5"
+            custom:imageShow="@{model.result}"
             tools:ignore="contentDescription" />
 
         <androidx.core.widget.ContentLoadingProgressBar
@@ -49,12 +52,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:scrollbarStyle="insideInset"
-            android:visibility="@{model.progress ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.5" />
+            app:layout_constraintVertical_bias="0.5"
+            custom:progressShow="@{model.result}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

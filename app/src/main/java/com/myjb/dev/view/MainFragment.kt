@@ -9,7 +9,10 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import com.myjb.dev.model.Repository
 import com.myjb.dev.model.data.Company
 import com.myjb.dev.model.data.Value
-import com.myjb.dev.model.remote.datasource.RemoteDataSource
+import com.myjb.dev.model.remote.datasource.APIResponse
+import com.myjb.dev.model.remote.datasource.AladinRemoteDataSource
+import com.myjb.dev.model.remote.datasource.Yes24RemoteDataSource
+import com.myjb.dev.model.remote.dto.BookInfoItem
 import com.myjb.dev.mygaragesale.databinding.FragmentMainBinding
 import com.myjb.dev.view.adapter.BookInfoAdapter
 import com.myjb.dev.viewmodel.MainViewModel
@@ -25,7 +28,10 @@ class MainFragment : Fragment() {
     private val viewModel: MainViewModel by lazy {
         MainViewModel(
             company = company,
-            repository = Repository(dataSource = RemoteDataSource(company = company))
+            repository = Repository(
+                aladinDataSource = AladinRemoteDataSource,
+                yes24DataSource = Yes24RemoteDataSource
+            )
         )
     }
 
@@ -63,8 +69,20 @@ class MainFragment : Fragment() {
             recyclerView.itemAnimator = DefaultItemAnimator()
         }
 
-        viewModel.list.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
+        viewModel.result.observe(viewLifecycleOwner) {
+            when (it) {
+                is APIResponse.Success<*> -> {
+                    adapter.submitList((it.data as List<BookInfoItem>))
+                }
+
+                is APIResponse.Error -> {
+                    it.errorCode
+                }
+
+                else -> {
+
+                }
+            }
         }
     }
 
