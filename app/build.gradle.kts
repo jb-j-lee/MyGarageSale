@@ -1,18 +1,18 @@
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-
-    id("com.google.dagger.hilt.android")
-    id("kotlin-kapt")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.hilt)
 }
 
 android {
     namespace = "com.myjb.dev.mygaragesale"
-    compileSdk = Sdk.COMPILE
+    compileSdk = 34
 
     defaultConfig {
-        minSdk = Sdk.MIN
-        targetSdk = Sdk.TARGET
+        minSdk = 24
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -47,37 +47,37 @@ android {
 }
 
 dependencies {
-    implementation("androidx.activity:activity-ktx:1.9.1")
-    implementation("androidx.appcompat:appcompat:1.7.0")
-    implementation("androidx.cardview:cardview:1.0.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.core:core-splashscreen:1.0.1")
-    implementation("androidx.fragment:fragment-ktx:1.8.2")
-    implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.cardview)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.recyclerview)
 
     // LifeCycle
-    implementation(AAC.Lifecycle.LIVEDATA)
-    implementation(AAC.Lifecycle.VIEWMODEL)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
     // Hilt
-    implementation(Google.Dagger.HILT)
-    kapt(Google.Dagger.HILT_COMPILER)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 
-    implementation(Google.MATERIAL)
+    implementation(libs.material)
 
     // Jsoup
-    implementation(Jsoup.JSOUP)
+    implementation(libs.jsoup)
 
     // Zxing
-    implementation(Zxing.GOOGLE)
-    implementation(Zxing.JOURNEYAPPS)
+    implementation(libs.zxing.core)
+    implementation(libs.zxing.android.embedded)
 
     // Glide
-    implementation(Glide.GLIDE)
-    kapt(Glide.COMPILER)
+    implementation(libs.glide)
+    ksp(libs.glide.ksp)
 
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.2.1")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 }
