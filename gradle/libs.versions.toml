@@ -101,3 +101,5 @@ navigation = ["androidx-navigation-fragment-ktx", "androidx-navigation-ui-ktx"]
 okhttp = ["okhttp-bom", "okhttp", "okhttp-urlconnection", "okhttp-logging-interceptor"]
 retrofit = ["retrofit-bom", "retrofit", "retrofit-converter-moshi", "retrofit-converter-gson", "retrofit-converter-scalars"]
 moshi = ["moshi-kotlin", "moshi-kotlin-codegen"]
+
+zxing = ["zxing-core", "zxing-android-embedded"]

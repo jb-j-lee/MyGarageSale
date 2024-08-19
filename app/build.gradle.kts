@@ -57,11 +57,10 @@ dependencies {
     implementation(libs.androidx.recyclerview)
 
     // LifeCycle
-    implementation(libs.androidx.lifecycle.livedata.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.bundles.lifecycle)
 
     // Hilt
-    implementation(libs.hilt.android)
+    implementation(libs.bundles.hilt)
     kapt(libs.hilt.compiler)
 
     implementation(libs.material)
@@ -70,8 +69,7 @@ dependencies {
     implementation(libs.jsoup)
 
     // Zxing
-    implementation(libs.zxing.core)
-    implementation(libs.zxing.android.embedded)
+    implementation(libs.bundles.zxing)
 
     // Glide
     implementation(libs.glide)
