@@ -15,8 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class MainViewModel @Inject constructor(
     private val repository: Repository,
-) :
-    ViewModel() {
+) : ViewModel() {
 
     lateinit var company: Company
 

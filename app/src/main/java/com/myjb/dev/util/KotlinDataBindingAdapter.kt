@@ -9,7 +9,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.request.RequestOptions
 import com.myjb.dev.model.remote.datasource.APIResponse
-import com.myjb.dev.model.remote.dto.BookInfoItem
 import com.myjb.dev.mygaragesale.R
 import com.myjb.dev.view.adapter.BookInfoAdapter
 import kotlinx.coroutines.CoroutineScope
@@ -29,7 +28,7 @@ fun ContentLoadingProgressBar.bindShow(response: APIResponse?) {
 @BindingAdapter("imageShow")
 fun ImageView.bindShow(response: APIResponse?) {
     visibility =
-        if (response is APIResponse.Success<*> && (response.data as List<BookInfoItem>).isEmpty()) {
+        if (response is APIResponse.Success && response.data.isEmpty()) {
             View.VISIBLE
         } else {
             View.GONE
@@ -63,7 +62,7 @@ fun ImageView.setImageUrl(url: String) {
 
 @BindingAdapter("bindItem")
 fun RecyclerView.bindItem(response: APIResponse?) {
-    if (response is APIResponse.Success<*>) {
-        (adapter as BookInfoAdapter).submitList((response.data as List<BookInfoItem>))
+    if (response is APIResponse.Success) {
+        (adapter as BookInfoAdapter).submitList(response.data)
     }
 }

@@ -57,7 +57,8 @@
 
 # Build Dependency
 
-- [kotlin-dsl](https://developer.android.com/build/migrate-to-kotlin-dsl)
+- [version catalog](https://developer.android.com/build/migrate-to-catalogs)
+- ~~[kotlin-dsl](https://developer.android.com/build/migrate-to-kotlin-dsl)~~
 
 Aladin CI
 https://www.aladin.co.kr/aladdin/waladdin.aspx?pn=ci
