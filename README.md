@@ -28,12 +28,14 @@
 - Data Binding
 - LifeCycles
 - LiveData
+- Navigation
 - ViewModel
 
 # UI
 
 - SplashScreen
 - MainActivity
+- Light and Dark Mode
 
 # Architectural Patterns
 
