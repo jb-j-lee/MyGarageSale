@@ -64,8 +64,7 @@
                 app:layout_constraintBottom_toTopOf="@id/table"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/name"
-                app:srcCompat="@drawable/save"
-                app:tint="@color/colorAccent"
+                app:srcCompat="@drawable/bookmark_24px"
                 tools:ignore="contentDescription" />
 
             <TableLayout

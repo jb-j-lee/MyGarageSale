@@ -6,13 +6,9 @@
 
     <data>
 
-        <import type="com.myjb.dev.model.data.Company" />
-
-        <import type="com.myjb.dev.model.remote.datasource.APIResponse" />
-
         <variable
             name="model"
-            type="com.myjb.dev.viewmodel.MainViewModel" />
+            type="com.myjb.dev.viewmodel.Yes24ViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -39,7 +35,7 @@
             android:layout_height="wrap_content"
             android:alpha="0.5"
             android:scaleType="fitCenter"
-            android:src="@{model.company == Company.YES24 ? @drawable/logo_yes24 : @drawable/logo_aladin}"
+            android:src="@drawable/logo_yes24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

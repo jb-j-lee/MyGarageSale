@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_aladin">
+
+    <fragment
+        android:id="@+id/navigation_aladin"
+        android:name="com.myjb.dev.view.AladinFragment"
+        android:label="@string/aladin_button"
+        tools:layout="@layout/fragment_aladin" />
+
+    <fragment
+        android:id="@+id/navigation_yes24"
+        android:name="com.myjb.dev.view.Yes24Fragment"
+        android:label="@string/yes24_button"
+        tools:layout="@layout/fragment_yes24" />
+</navigation>

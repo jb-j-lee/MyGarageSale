@@ -8,39 +8,9 @@
     <!--   a secondary color for controls like checkboxes and text fields -->
     <color name="colorAccent">#FF4081</color>
 
-    <color name="Indigo50">#E8EAF6</color>
-    <color name="Indigo100">#C5CAE9</color>
-    <color name="Indigo200">#9FA8DA</color>
-    <color name="Indigo300">#7986CB</color>
-    <color name="Indigo400">#5C6BC0</color>
-    <color name="Indigo500">#3F51B5</color>
-    <color name="Indigo600">#3949AB</color>
-    <color name="Indigo700">#303F9F</color>
-    <color name="Indigo800">#283593</color>
-    <color name="Indigo900">#1A237E</color>
-
-    <color name="IndigoA100">#8C9EFF</color>
-    <color name="IndigoA200">#536DFE</color>
-    <color name="IndigoA400">#3D5AFE</color>
-    <color name="IndigoA700">#304FFE</color>
-
-    <color name="Gray50">#FAFAFA</color>
-    <color name="Gray100">#F5F5F5</color>
-    <color name="Gray200">#EEEEEE</color>
-    <color name="Gray300">#E0E0E0</color>
-    <color name="Gray400">#BDBDBD</color>
-    <color name="Gray500">#9E9E9E</color>
-    <color name="Gray600">#757575</color>
-    <color name="Gray700">#616161</color>
-    <color name="Gray800">#424242</color>
-    <color name="Gray900">#212121</color>
-
-    <color name="colorTextBlack">@android:color/black</color>
-    <color name="colorTextWhite">@android:color/white</color>
-
-    <color name="colorTextLightGray">@color/Gray400</color>
-    <color name="colorTextGray">@color/Gray500</color>
-    <color name="colorTextDark">#212121</color>
-    <color name="colorTextHint">#FF1744</color>
-    <color name="colorTextTitle">#2095B8</color>
+    <color name="basicTextViewTextColor">@android:color/black</color>
+    <color name="basicEditTextViewTextColor">@android:color/white</color>
+    <color name="basicTextHintColor">@color/Gray500</color>
+    <color name="basicBarcodeScanColor">@android:color/white</color>
+    <color name="basicTableColor">@color/Gray200</color>
 </resources>

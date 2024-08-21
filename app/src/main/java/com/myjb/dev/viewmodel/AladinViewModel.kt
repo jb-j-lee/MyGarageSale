@@ -13,19 +13,17 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-internal class MainViewModel @Inject constructor(
+internal class AladinViewModel @Inject constructor(
     private val repository: Repository,
 ) : ViewModel() {
-
-    lateinit var company: Company
 
     private val _result = MutableLiveData<APIResponse>()
     val result: LiveData<APIResponse>
         get() = _result
 
-    fun getBooks(company: Company, text: String) {
+    fun getBooks(text: String) {
         viewModelScope.launch(Dispatchers.Main) {
-            repository.getBooks(company = company, text = text).collect {
+            repository.getBooks(company = Company.ALADIN, text = text).collect {
                 _result.value = it
             }
         }

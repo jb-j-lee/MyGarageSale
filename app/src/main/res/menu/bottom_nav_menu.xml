@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_aladin"
+        android:icon="@drawable/logo_aladin"
+        android:title="@string/aladin_button" />
+
+    <item
+        android:id="@+id/navigation_yes24"
+        android:icon="@drawable/logo_yes24"
+        android:title="@string/yes24_button" />
+</menu>

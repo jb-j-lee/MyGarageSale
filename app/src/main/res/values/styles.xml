@@ -12,28 +12,13 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">?actionBarSize</item>
         <item name="android:layout_gravity">bottom</item>
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:padding">0dp</item>
         <item name="layout_collapseMode">pin</item>
     </style>
 
-    <style name="MyTabLayout" parent="Widget.Design.TabLayout">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="textAllCaps">false</item>
-        <item name="tabIndicatorFullWidth">true</item>
-        <item name="tabSelectedTextColor">@color/colorTextWhite</item>
-        <item name="tabTextColor">@color/colorTextLightGray</item>
-        <item name="tabMode">fixed</item>
-        <item name="tabGravity">fill</item>
-    </style>
-
-    <style name="MyViewPager">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="layout_behavior">@string/appbar_scrolling_view_behavior</item>
-    </style>
-
     <style name="MyTextView">
-        <item name="android:textColor">@color/colorTextBlack</item>
+        <item name="android:textColor">@color/basicTextViewTextColor</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">match_parent</item>
@@ -50,7 +35,7 @@
     <style name="MyBookTitle" parent="MyTextView">
         <item name="android:textSize">15sp</item>
         <item name="android:minHeight">?attr/listPreferredItemHeightSmall</item>
-        <item name="android:gravity">center_vertical|left</item>
+        <item name="android:gravity">center_vertical|start</item>
         <item name="android:singleLine">false</item>
     </style>
 
@@ -76,9 +61,10 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:textColor">@color/colorTextWhite</item>
-        <item name="android:textColorHint">@color/colorTextLightGray</item>
-        <item name="android:imeOptions">flagNoFullscreen|flagNoExtractUi|actionDone</item>
+        <item name="android:textColor">@color/basicEditTextViewTextColor</item>
+        <item name="android:textColorHint">@color/basicTextHintColor</item>
+        <item name="android:imeOptions">flagNoFullscreen|flagNoExtractUi|actionSearch</item>
         <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
     </style>
 </resources>
