@@ -1,14 +1,14 @@
 package com.myjb.dev.view
 
+import android.content.Context
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.journeyapps.barcodescanner.ScanContract
@@ -40,7 +40,7 @@ internal class MainActivity : AppCompatActivity() {
                 return@registerForActivityResult
             }
 
-            binding.editText.setText(barcode)
+            binding.textInputEditText.setText(barcode)
             search(barcode)
         }
 
@@ -51,29 +51,28 @@ internal class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         bindViews()
-
-        val navView: BottomNavigationView = binding.navView
-
-        val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.navigation_aladin, R.id.navigation_yes24)
-        )
-//        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+        bindNavigation()
     }
 
     private fun bindViews() {
         with(binding) {
             scanButton.setOnSingleClickListener { scanBarcode() }
 
-            editText.setOnEditorActionListener { v: TextView?, actionId: Int, event: KeyEvent? ->
+            textInputEditText.setOnEditorActionListener { v: TextView?, actionId: Int, _: KeyEvent? ->
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    search(binding.editText.text.toString())
+                    search(v?.text.toString())
+                    return@setOnEditorActionListener true
                 }
 
-                false
+                return@setOnEditorActionListener false
             }
         }
+    }
+
+    private fun bindNavigation() {
+        val navView: BottomNavigationView = binding.navView
+        val navController = binding.navContainer.getFragment<NavHostFragment>().navController
+        navView.setupWithNavController(navController)
     }
 
     @TestOnly
@@ -81,18 +80,22 @@ internal class MainActivity : AppCompatActivity() {
         super.onPostCreate(savedInstanceState)
 
         if (BuildConfig.DEBUG) {
-            binding.editText.postDelayed({
-                binding.editText.setText("무례한 사람에게 웃으며 대처하는 법")
-                search(binding.editText.text.toString())
+            val view = binding.textInputEditText
+            view.postDelayed({
+                view.setText("무례한 사람에게 웃으며 대처하는 법")
+                search(view.text.toString())
             }, 1000)
         }
     }
 
     private fun search(text: String) {
-        binding.editText.clearFocus()
+        Logger.e(TAG, "[search] text : $text")
 
-        if (text.isEmpty()) {
-            Toast.makeText(baseContext, R.string.hint_edittext, Toast.LENGTH_SHORT).show()
+        with(binding.textInputEditText) {
+            if (isInputMethodTarget) {
+                clearFocus()
+                hideSoftInput()
+            }
         }
 
         val primary =
@@ -112,5 +115,17 @@ internal class MainActivity : AppCompatActivity() {
             setBarcodeImageEnabled(true)
         }
         barcodeLauncher.launch(options)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_container) as NavHostFragment
+        val navController = navHostFragment.navController
+        return navController.navigateUp() || super.onSupportNavigateUp()
+    }
+
+    private fun hideSoftInput() {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.textInputEditText.windowToken, 0)
     }
 }

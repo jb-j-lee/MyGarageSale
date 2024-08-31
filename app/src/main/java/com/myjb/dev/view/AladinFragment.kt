@@ -8,9 +8,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DefaultItemAnimator
 import com.myjb.dev.mygaragesale.databinding.FragmentAladinBinding
+import com.myjb.dev.util.Logger
 import com.myjb.dev.view.adapter.BookInfoAdapter
 import com.myjb.dev.viewmodel.AladinViewModel
 import dagger.hilt.android.AndroidEntryPoint
+
+private const val TAG = "AladinFragment"
 
 @AndroidEntryPoint
 class AladinFragment : Fragment() {
@@ -45,10 +48,8 @@ class AladinFragment : Fragment() {
     }
 
     fun search(text: String) {
-        if (text.isEmpty()) {
-            adapter.submitList(mutableListOf())
-        } else {
-            viewModel.getBooks(text = text)
-        }
+        Logger.e(TAG, "[search] text : $text")
+
+        viewModel.getBooks(text = text)
     }
 }

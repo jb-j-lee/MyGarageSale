@@ -44,26 +44,19 @@
                         app:srcCompat="@drawable/barcode_scanner_24px" />
 
                     <com.google.android.material.textfield.TextInputLayout
-                        style="@style/MyTextInputLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/hint_edittext"
-                        android:textColorHint="@color/basicTextHintColor"
-                        android:theme="@style/Theme.MaterialComponents.NoActionBar"
-                        app:endIconMode="clear_text"
-                        app:endIconTint="@color/basicTextHintColor"
-                        app:hintEnabled="true">
+                        android:id="@+id/textInputLayout"
+                        style="@style/MyTextInputLayout">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/editText"
+                            android:id="@+id/textInputEditText"
                             style="@style/MyTextInputEditText" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </androidx.appcompat.widget.Toolbar>
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
-        <fragment
-            android:id="@+id/nav_host_fragment_activity_main"
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/nav_container"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

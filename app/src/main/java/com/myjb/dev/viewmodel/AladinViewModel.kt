@@ -23,6 +23,11 @@ internal class AladinViewModel @Inject constructor(
 
     fun getBooks(text: String) {
         viewModelScope.launch(Dispatchers.Main) {
+            if (text.isBlank()) {
+                _result.value = APIResponse.Success(mutableListOf())
+                return@launch
+            }
+
             repository.getBooks(company = Company.ALADIN, text = text).collect {
                 _result.value = it
             }

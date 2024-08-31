@@ -3,14 +3,14 @@
     <style name="MyCollapsingToolbarLayout">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:fitsSystemWindows">true</item>
         <item name="contentScrim">?attr/colorPrimary</item>
         <item name="layout_scrollFlags">scroll|exitUntilCollapsed</item>
     </style>
 
     <style name="MyToolbar" parent="Base.Widget.AppCompat.Toolbar">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">?actionBarSize</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">?actionBarSize</item>
         <item name="android:layout_gravity">bottom</item>
         <item name="android:layout_margin">8dp</item>
         <item name="android:padding">0dp</item>
@@ -18,25 +18,24 @@
     </style>
 
     <style name="MyTextView">
-        <item name="android:textColor">@color/basicTextViewTextColor</item>
-        <item name="android:gravity">center</item>
         <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
         <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLines">1</item>
         <item name="android:singleLine">true</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/basicTextViewTextColor</item>
         <item name="android:textAppearance">?attr/textAppearanceListItemSmall</item>
-        <item name="android:layout_centerVertical">true</item>
-        <item name="android:layout_centerHorizontal">true</item>
-        <item name="android:layout_centerInParent">true</item>
-        <item name="android:adjustViewBounds">true</item>
     </style>
 
     <style name="MyBookTitle" parent="MyTextView">
-        <item name="android:textSize">15sp</item>
-        <item name="android:minHeight">?attr/listPreferredItemHeightSmall</item>
         <item name="android:gravity">center_vertical|start</item>
+        <item name="android:maxLines">2</item>
         <item name="android:singleLine">false</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textAppearance">?attr/listPreferredItemHeightLarge</item>
     </style>
 
     <style name="MyBookCol" parent="MyTextView" />
@@ -54,17 +53,23 @@
         <item name="android:button">@null</item>
     </style>
 
-    <style name="MyTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox" />
+    <style name="MyTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:hint">@string/hint_edittext</item>
+        <item name="android:textColorHint">@color/basicTextHintColor</item>
+        <item name="android:theme">@style/Theme.MaterialComponents</item>
+        <item name="endIconMode">clear_text</item>
+        <item name="endIconTint">@color/basicTextHintColor</item>
+        <item name="hintEnabled">true</item>
+    </style>
 
     <style name="MyTextInputEditText" parent="Widget.MaterialComponents.TextInputEditText.OutlinedBox">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:gravity">center_vertical</item>
         <item name="android:textColor">@color/basicEditTextViewTextColor</item>
-        <item name="android:textColorHint">@color/basicTextHintColor</item>
         <item name="android:imeOptions">flagNoFullscreen|flagNoExtractUi|actionSearch</item>
-        <item name="android:singleLine">true</item>
         <item name="android:maxLines">1</item>
+        <item name="android:singleLine">true</item>
     </style>
 </resources>
