@@ -7,6 +7,10 @@
     <data>
 
         <variable
+            name="arg"
+            type="String" />
+
+        <variable
             name="model"
             type="com.myjb.dev.viewmodel.AladinViewModel" />
     </data>

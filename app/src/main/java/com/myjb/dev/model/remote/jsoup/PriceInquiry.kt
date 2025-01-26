@@ -11,10 +11,9 @@ import org.jsoup.select.Elements
 import java.io.IOException
 import java.io.UnsupportedEncodingException
 import java.net.MalformedURLException
-import java.net.URLEncoder
 import java.net.UnknownHostException
 
-open class PriceInquiry(private val query: String) {
+open class PriceInquiry(protected val query: String) {
 
     protected open val TAG = "PriceInquiry"
     protected open val baseUrl: String = ""
@@ -37,9 +36,12 @@ open class PriceInquiry(private val query: String) {
     protected open val priceFilter: String
         get() = ""
 
+    protected open val encodedQuery: String
+        get() = ""
+
     fun getPriceInfo(): List<BookInfoItem> {
         val url: String = try {
-            baseUrl + URLEncoder.encode(query, "UTF-8")
+            baseUrl + encodedQuery
         } catch (e: UnsupportedEncodingException) {
             e.printStackTrace()
             ""

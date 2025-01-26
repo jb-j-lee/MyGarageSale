@@ -7,6 +7,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -73,6 +74,27 @@ internal class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = binding.navView
         val navController = binding.navContainer.getFragment<NavHostFragment>().navController
         navView.setupWithNavController(navController)
+
+        navView.setOnItemSelectedListener {
+            val text = binding.textInputEditText.text.toString()
+            Logger.e(TAG, "[onNavigationItemSelected] text : $text")
+
+            when (it.itemId) {
+                R.id.navigation_aladin -> {
+                    navController.navigate(it.itemId, bundleOf("aladinArgument" to text))
+                    return@setOnItemSelectedListener true
+                }
+
+                R.id.navigation_yes24 -> {
+                    navController.navigate(it.itemId, bundleOf("yes24Argument" to text))
+                    return@setOnItemSelectedListener true
+                }
+
+                else -> {
+                    return@setOnItemSelectedListener false
+                }
+            }
+        }
     }
 
     @TestOnly
@@ -98,6 +120,7 @@ internal class MainActivity : AppCompatActivity() {
             }
         }
 
+        //TODO
         val primary =
             supportFragmentManager.fragments[0].childFragmentManager.primaryNavigationFragment
         if (primary is AladinFragment) {

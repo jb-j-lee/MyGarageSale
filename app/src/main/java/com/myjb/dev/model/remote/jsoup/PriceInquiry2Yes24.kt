@@ -9,7 +9,7 @@ import org.jsoup.select.Elements
 internal class PriceInquiry2Yes24(query: String) : PriceInquiry(query) {
 
     override val TAG = "PriceInquiry2Yes24"
-    override val baseUrl = "http://www.yes24.com/Mall/buyback/Search?CategoryNumber=018&SearchWord="
+    override val baseUrl = "https://www.yes24.com/Mall/buyback/Search?CategoryNumber=018&SearchWord="
 
     override fun getElements(document: Document): Elements {
         val elements = super.getElements(document)
@@ -48,4 +48,61 @@ internal class PriceInquiry2Yes24(query: String) : PriceInquiry(query) {
 
     override val priceFilter: String
         get() = "td"
+
+    override val encodedQuery: String
+        get() = toUnicodeEx(query)
+//        get() = URLEncoder.encode(query, "UTF-8")
+
+    fun convertUnicodeToString(unicodeString: String): String {
+        var str: String = unicodeString.split(" ")[0]
+        str = str.replace("\\", "")
+        val arr = str.split("u").toTypedArray()
+        var text = ""
+        for (i in 1 until arr.size) {
+            val hexVal = arr[i].toInt(16)
+            text += hexVal.toChar()
+        }
+
+        return text
+    }
+
+    fun toUnicode(text: String): String {
+        val sb = StringBuffer()
+        var i = 0
+        while (i < text.length) {
+            val codePoint = text.codePointAt(i)
+            // Skip over the second char in a surrogate pair
+            if (codePoint > 0xffff) {
+                i++
+            }
+            val hex = Integer.toHexString(codePoint)
+            sb.append("\\u")
+            for (j in 0 until 4 - hex.length) {
+                sb.append("0")
+            }
+            sb.append(hex)
+            i++
+        }
+        return sb.toString()
+    }
+
+    fun toUnicodeEx(text: String): String {
+        val sb = StringBuffer()
+        var i = 0
+        while (i < text.length) {
+            val codePoint = text.codePointAt(i)
+            // Skip over the second char in a surrogate pair
+            if (codePoint > 0xffff) {
+                i++
+            }
+            val hex = Integer.toHexString(codePoint)
+            sb.append("%u")
+            for (j in 0 until 4 - hex.length) {
+                sb.append("0")
+            }
+            sb.append(hex.uppercase())
+            i++
+        }
+        return sb.toString().replace("%u0020", "%20")
+    }
 }

@@ -10,11 +10,11 @@ plugins {
 
 android {
     namespace = "com.myjb.dev.mygaragesale"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -25,24 +25,25 @@ android {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
+
     buildFeatures {
         buildConfig = true
         dataBinding = true
         viewBinding = true
     }
+
     lint {
         abortOnError = true
     }
@@ -66,11 +67,12 @@ dependencies {
 
     // Hilt
     implementation(libs.bundles.hilt)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
 
+    // Material
     implementation(libs.material)
 
-    // Jsoup
+    // Jsoup : https://jsoup.org/
     implementation(libs.jsoup)
 
     // Zxing

@@ -9,11 +9,26 @@
         android:id="@+id/navigation_aladin"
         android:name="com.myjb.dev.view.AladinFragment"
         android:label="@string/aladin_button"
-        tools:layout="@layout/fragment_aladin" />
-
+        tools:layout="@layout/fragment_aladin">
+        <action
+            android:id="@+id/action_to_yes24"
+            app:destination="@id/navigation_yes24" />
+        <argument
+            android:name="aladinArgument"
+            android:defaultValue=""
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_yes24"
         android:name="com.myjb.dev.view.Yes24Fragment"
         android:label="@string/yes24_button"
-        tools:layout="@layout/fragment_yes24" />
+        tools:layout="@layout/fragment_yes24">
+        <action
+            android:id="@+id/action_to_aladin"
+            app:destination="@id/navigation_aladin" />
+        <argument
+            android:name="yes24Argument"
+            android:defaultValue=""
+            app:argType="string" />
+    </fragment>
 </navigation>

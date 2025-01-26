@@ -4,12 +4,13 @@ import com.myjb.dev.model.data.Company
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
+import java.net.URLEncoder
 
 internal class PriceInquiry2Aladin(query: String) : PriceInquiry(query) {
 
     override val TAG = "PriceInquiry2Aladin"
     override val baseUrl =
-        "http://www.aladin.co.kr/shop/usedshop/wc2b_search.aspx?ActionType=1&SearchTarget=Book&KeyWord="
+        "https://www.aladin.co.kr/shop/usedshop/wc2b_search.aspx?ActionType=1&SearchTarget=Book&KeyWord="
 
     override fun getElements(document: Document): Elements {
         val elements = super.getElements(document)
@@ -46,4 +47,7 @@ internal class PriceInquiry2Aladin(query: String) : PriceInquiry(query) {
 
     override val priceFilter: String
         get() = "td[class=c2b_tablet3]"
+
+    override val encodedQuery: String
+        get() = URLEncoder.encode(query, "UTF-8")
 }

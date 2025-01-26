@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DefaultItemAnimator
 import com.myjb.dev.mygaragesale.databinding.FragmentYes24Binding
 import com.myjb.dev.util.Logger
@@ -30,6 +31,8 @@ class Yes24Fragment : Fragment() {
         BookInfoAdapter(requireContext())
     }
 
+    private val args by navArgs<Yes24FragmentArgs>()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -45,11 +48,23 @@ class Yes24Fragment : Fragment() {
             recyclerView.adapter = adapter
             recyclerView.itemAnimator = DefaultItemAnimator()
         }
+
+        val text = args.yes24Argument
+        search(text = text)
     }
 
     fun search(text: String) {
         Logger.e(TAG, "[search] text : $text")
 
         viewModel.getBooks(text = text)
+    }
+
+    override fun onPrimaryNavigationFragmentChanged(isPrimaryNavigationFragment: Boolean) {
+        super.onPrimaryNavigationFragmentChanged(isPrimaryNavigationFragment)
+
+        Logger.e(
+            TAG,
+            "[onPrimaryNavigationFragmentChanged] isPrimaryNavigationFragment : $isPrimaryNavigationFragment"
+        )
     }
 }
