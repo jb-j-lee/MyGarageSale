@@ -13,4 +13,6 @@
     <color name="basicTextHintColor">@color/Gray500</color>
     <color name="basicBarcodeScanColor">@android:color/white</color>
     <color name="basicTableColor">@color/Gray200</color>
+    <color name="basicBottomNavigationIconNormalText">@color/Gray300</color>
+    <color name="basicBottomNavigationIconSelectText">@color/Indigo500</color>
 </resources>

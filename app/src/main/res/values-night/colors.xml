@@ -3,6 +3,8 @@
     <color name="basicTextViewTextColor">@android:color/white</color>
     <color name="basicEditTextViewTextColor">@android:color/white</color>
     <color name="basicTextHintColor">@color/Gray300</color>
-    <color name="basicBarcodeScanColor">@color/Gray300</color>
+    <color name="basicBarcodeScanColor">@color/Gray200</color>
     <color name="basicTableColor">@color/Gray500</color>
+    <color name="basicBottomNavigationIconNormalText">@color/Gray500</color>
+    <color name="basicBottomNavigationIconSelectText">@color/Gray200</color>
 </resources>
